@@ -16,6 +16,7 @@
 		4987830F25BE14600079701A /* MyTubeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987830E25BE14600079701A /* MyTubeTests.swift */; };
 		4987831A25BE14600079701A /* MyTubeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987831925BE14600079701A /* MyTubeUITests.swift */; };
 		4987832E25BE14D10079701A /* VideosListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987832D25BE14D10079701A /* VideosListView.swift */; };
+		4987833725BE93B10079701A /* VideoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987833625BE93B10079701A /* VideoDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		4987831925BE14600079701A /* MyTubeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTubeUITests.swift; sourceTree = "<group>"; };
 		4987831B25BE14600079701A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4987832D25BE14D10079701A /* VideosListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosListView.swift; sourceTree = "<group>"; };
+		4987833625BE93B10079701A /* VideoDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 			children = (
 				498782F725BE145D0079701A /* MyTubeApp.swift */,
 				4987832D25BE14D10079701A /* VideosListView.swift */,
+				4987833625BE93B10079701A /* VideoDetailView.swift */,
 				498782F925BE145D0079701A /* ContentView.swift */,
 				498782FB25BE14600079701A /* Assets.xcassets */,
 				4987830025BE14600079701A /* Persistence.swift */,
@@ -269,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4987830125BE14600079701A /* Persistence.swift in Sources */,
+				4987833725BE93B10079701A /* VideoDetailView.swift in Sources */,
 				4987830425BE14600079701A /* MyTube.xcdatamodeld in Sources */,
 				4987832E25BE14D10079701A /* VideosListView.swift in Sources */,
 				498782FA25BE145D0079701A /* ContentView.swift in Sources */,

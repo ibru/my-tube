@@ -12,28 +12,21 @@ struct VideosListView: View {
         List {
             ForEach(1..<5) { _ in
                 HStack {
-                    Image("peppa_pig_video_thumbnail")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(maxWidth: .infinity, maxHeight: 60)
+                    ZStack(alignment: .bottomTrailing) {
+                        Image("peppa_pig_video_thumbnail")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(maxWidth: .infinity, maxHeight: 100)
 
-                    VStack(alignment: .leading) {
-                        Text("Peppa Pig Official Channel 💚 Peppa Pig Episodes Live 24/7")
-                            .font(.headline)
-                            .lineLimit(2)
-                        Text("225k views")
-                            .font(.subheadline)
-
-                        HStack {
-                            Image("peppa_ping_channel_avatar")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 25)
-                            Text("Peppa Pig - Official channel")
-                                .font(.caption)
-                        }
+                        Text("1:04:43 ")
+                            .font(.caption)
+                            .foregroundColor(.black)
+                            .frame(width: .infinity, height: .infinity, alignment: .bottomTrailing)
+                            .background(Color.white)
                     }
-                    .padding(5)
+
+                    VideoInfoView()
+                        .padding(5)
                 }
             }
         }
