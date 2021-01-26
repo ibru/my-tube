@@ -22,7 +22,9 @@ struct VideosListView: View {
                             .font(.caption)
                             .foregroundColor(.black)
                             .frame(width: .infinity, height: .infinity, alignment: .bottomTrailing)
+                            .padding(1)
                             .background(Color.white)
+                            .padding(1)
                     }
 
                     VideoInfoView()
