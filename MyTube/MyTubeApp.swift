@@ -13,7 +13,7 @@ struct MyTubeApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            VideosListView(viewModel: VideosListViewModel(videosRepository: MockVideosRepository()))
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

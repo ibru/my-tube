@@ -3,20 +3,25 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		49206EF925C035FC0088DBDF /* VideosListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49206EF825C035FC0088DBDF /* VideosListViewModel.swift */; };
+		49206EFF25C0372C0088DBDF /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49206EFE25C0372C0088DBDF /* Feedback.swift */; };
+		49206F0725C0374B0088DBDF /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49206F0625C0374B0088DBDF /* System.swift */; };
+		49206F0C25C041E90088DBDF /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49206F0B25C041E90088DBDF /* SearchBar.swift */; };
+		492579B025C05C30003B4BA8 /* VideosListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492579AF25C05C30003B4BA8 /* VideosListViewModelTests.swift */; };
 		498782F825BE145D0079701A /* MyTubeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498782F725BE145D0079701A /* MyTubeApp.swift */; };
 		498782FA25BE145D0079701A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498782F925BE145D0079701A /* ContentView.swift */; };
 		498782FC25BE14600079701A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 498782FB25BE14600079701A /* Assets.xcassets */; };
 		498782FF25BE14600079701A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 498782FE25BE14600079701A /* Preview Assets.xcassets */; };
 		4987830125BE14600079701A /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987830025BE14600079701A /* Persistence.swift */; };
 		4987830425BE14600079701A /* MyTube.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4987830225BE14600079701A /* MyTube.xcdatamodeld */; };
-		4987830F25BE14600079701A /* MyTubeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987830E25BE14600079701A /* MyTubeTests.swift */; };
 		4987831A25BE14600079701A /* MyTubeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987831925BE14600079701A /* MyTubeUITests.swift */; };
 		4987832E25BE14D10079701A /* VideosListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987832D25BE14D10079701A /* VideosListView.swift */; };
 		4987833725BE93B10079701A /* VideoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987833625BE93B10079701A /* VideoDetailView.swift */; };
+		499F7E1125C142600099C1B0 /* CombineExpectations in Frameworks */ = {isa = PBXBuildFile; productRef = 499F7E1025C142600099C1B0 /* CombineExpectations */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +42,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		49206EF825C035FC0088DBDF /* VideosListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosListViewModel.swift; sourceTree = "<group>"; };
+		49206EFE25C0372C0088DBDF /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feedback.swift; sourceTree = "<group>"; };
+		49206F0625C0374B0088DBDF /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
+		49206F0B25C041E90088DBDF /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		492579AF25C05C30003B4BA8 /* VideosListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosListViewModelTests.swift; sourceTree = "<group>"; };
 		498782F425BE145D0079701A /* MyTube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTube.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		498782F725BE145D0079701A /* MyTubeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTubeApp.swift; sourceTree = "<group>"; };
 		498782F925BE145D0079701A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -46,7 +56,6 @@
 		4987830325BE14600079701A /* MyTube.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyTube.xcdatamodel; sourceTree = "<group>"; };
 		4987830525BE14600079701A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4987830A25BE14600079701A /* MyTubeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyTubeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4987830E25BE14600079701A /* MyTubeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTubeTests.swift; sourceTree = "<group>"; };
 		4987831025BE14600079701A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4987831525BE14600079701A /* MyTubeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyTubeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4987831925BE14600079701A /* MyTubeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTubeUITests.swift; sourceTree = "<group>"; };
@@ -67,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				499F7E1125C142600099C1B0 /* CombineExpectations in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +90,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		49206EFD25C037200088DBDF /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				49206EFE25C0372C0088DBDF /* Feedback.swift */,
+				49206F0625C0374B0088DBDF /* System.swift */,
+			);
+			path = Feedback;
+			sourceTree = "<group>";
+		};
 		498782EB25BE145D0079701A = {
 			isa = PBXGroup;
 			children = (
@@ -103,10 +122,13 @@
 		498782F625BE145D0079701A /* MyTube */ = {
 			isa = PBXGroup;
 			children = (
+				49206EFD25C037200088DBDF /* Feedback */,
 				498782F725BE145D0079701A /* MyTubeApp.swift */,
 				4987832D25BE14D10079701A /* VideosListView.swift */,
+				49206EF825C035FC0088DBDF /* VideosListViewModel.swift */,
 				4987833625BE93B10079701A /* VideoDetailView.swift */,
 				498782F925BE145D0079701A /* ContentView.swift */,
+				49206F0B25C041E90088DBDF /* SearchBar.swift */,
 				498782FB25BE14600079701A /* Assets.xcassets */,
 				4987830025BE14600079701A /* Persistence.swift */,
 				4987830525BE14600079701A /* Info.plist */,
@@ -127,7 +149,7 @@
 		4987830D25BE14600079701A /* MyTubeTests */ = {
 			isa = PBXGroup;
 			children = (
-				4987830E25BE14600079701A /* MyTubeTests.swift */,
+				492579AF25C05C30003B4BA8 /* VideosListViewModelTests.swift */,
 				4987831025BE14600079701A /* Info.plist */,
 			);
 			path = MyTubeTests;
@@ -176,6 +198,9 @@
 				4987830C25BE14600079701A /* PBXTargetDependency */,
 			);
 			name = MyTubeTests;
+			packageProductDependencies = (
+				499F7E1025C142600099C1B0 /* CombineExpectations */,
+			);
 			productName = MyTubeTests;
 			productReference = 4987830A25BE14600079701A /* MyTubeTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -229,6 +254,9 @@
 				Base,
 			);
 			mainGroup = 498782EB25BE145D0079701A;
+			packageReferences = (
+				499F7E0F25C142600099C1B0 /* XCRemoteSwiftPackageReference "CombineExpectations" */,
+			);
 			productRefGroup = 498782F525BE145D0079701A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -271,11 +299,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49206F0C25C041E90088DBDF /* SearchBar.swift in Sources */,
 				4987830125BE14600079701A /* Persistence.swift in Sources */,
 				4987833725BE93B10079701A /* VideoDetailView.swift in Sources */,
 				4987830425BE14600079701A /* MyTube.xcdatamodeld in Sources */,
 				4987832E25BE14D10079701A /* VideosListView.swift in Sources */,
+				49206EF925C035FC0088DBDF /* VideosListViewModel.swift in Sources */,
 				498782FA25BE145D0079701A /* ContentView.swift in Sources */,
+				49206EFF25C0372C0088DBDF /* Feedback.swift in Sources */,
+				49206F0725C0374B0088DBDF /* System.swift in Sources */,
 				498782F825BE145D0079701A /* MyTubeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -284,7 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4987830F25BE14600079701A /* MyTubeTests.swift in Sources */,
+				492579B025C05C30003B4BA8 /* VideosListViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -596,6 +628,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		499F7E0F25C142600099C1B0 /* XCRemoteSwiftPackageReference "CombineExpectations" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/CombineExpectations.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		499F7E1025C142600099C1B0 /* CombineExpectations */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 499F7E0F25C142600099C1B0 /* XCRemoteSwiftPackageReference "CombineExpectations" */;
+			productName = CombineExpectations;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		4987830225BE14600079701A /* MyTube.xcdatamodeld */ = {
