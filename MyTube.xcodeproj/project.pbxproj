@@ -12,6 +12,7 @@
 		49206F0725C0374B0088DBDF /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49206F0625C0374B0088DBDF /* System.swift */; };
 		49206F0C25C041E90088DBDF /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49206F0B25C041E90088DBDF /* SearchBar.swift */; };
 		492579B025C05C30003B4BA8 /* VideosListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492579AF25C05C30003B4BA8 /* VideosListViewModelTests.swift */; };
+		49495DF225C4345C00B5B616 /* YoutubeVideosRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49495DF125C4345C00B5B616 /* YoutubeVideosRepository.swift */; };
 		498782F825BE145D0079701A /* MyTubeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498782F725BE145D0079701A /* MyTubeApp.swift */; };
 		498782FA25BE145D0079701A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498782F925BE145D0079701A /* ContentView.swift */; };
 		498782FC25BE14600079701A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 498782FB25BE14600079701A /* Assets.xcassets */; };
@@ -47,6 +48,7 @@
 		49206F0625C0374B0088DBDF /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
 		49206F0B25C041E90088DBDF /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		492579AF25C05C30003B4BA8 /* VideosListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosListViewModelTests.swift; sourceTree = "<group>"; };
+		49495DF125C4345C00B5B616 /* YoutubeVideosRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeVideosRepository.swift; sourceTree = "<group>"; };
 		498782F425BE145D0079701A /* MyTube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTube.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		498782F725BE145D0079701A /* MyTubeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTubeApp.swift; sourceTree = "<group>"; };
 		498782F925BE145D0079701A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				498782F725BE145D0079701A /* MyTubeApp.swift */,
 				4987832D25BE14D10079701A /* VideosListView.swift */,
 				49206EF825C035FC0088DBDF /* VideosListViewModel.swift */,
+				49495DF125C4345C00B5B616 /* YoutubeVideosRepository.swift */,
 				4987833625BE93B10079701A /* VideoDetailView.swift */,
 				498782F925BE145D0079701A /* ContentView.swift */,
 				49206F0B25C041E90088DBDF /* SearchBar.swift */,
@@ -302,6 +305,7 @@
 				49206F0C25C041E90088DBDF /* SearchBar.swift in Sources */,
 				4987830125BE14600079701A /* Persistence.swift in Sources */,
 				4987833725BE93B10079701A /* VideoDetailView.swift in Sources */,
+				49495DF225C4345C00B5B616 /* YoutubeVideosRepository.swift in Sources */,
 				4987830425BE14600079701A /* MyTube.xcdatamodeld in Sources */,
 				4987832E25BE14D10079701A /* VideosListView.swift in Sources */,
 				49206EF925C035FC0088DBDF /* VideosListViewModel.swift in Sources */,

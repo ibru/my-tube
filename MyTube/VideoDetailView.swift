@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct VideoDetailView: View {
+    var video: VideosListViewModel.VideoItem
+
     var body: some View {
         VStack {
             ZStack {
@@ -36,10 +38,9 @@ struct VideoDetailView: View {
                         .shadow(radius: 10)
                         .frame(width: 60, height: 60)
                 })
-
             }
 
-            VideoInfoView()
+            VideoInfoView(video: video)
                 .padding()
 
 
@@ -59,15 +60,17 @@ struct VideoDetailView: View {
 struct VideoDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            VideoDetailView()
+            VideoDetailView(video: .init(id: "123", title: "VIdeo title", imageThumbnailUrl: nil))
         }
     }
 }
 
 struct VideoInfoView: View {
+    var video: VideosListViewModel.VideoItem
+
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Peppa Pig Official Channel 💚 Peppa Pig Episodes Live 24/7")
+            Text(video.title)
                 .font(.headline)
                 .lineLimit(2)
             Text("225k views")

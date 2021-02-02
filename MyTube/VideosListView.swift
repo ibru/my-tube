@@ -74,7 +74,7 @@ struct VideosListView: View {
                             .padding(1)
                     }
 
-                    VideoInfoView()
+                    VideoInfoView(video: item)
                         .padding(5)
                 }
             }
