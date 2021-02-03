@@ -14,17 +14,27 @@ struct VideoDetailView: View {
         VStack {
             ZStack {
                 ZStack(alignment: .bottomTrailing) {
-                    Image("peppa_pig_video_thumbnail")
-                        .resizable()
+                    if let url = video.imageThumbnailUrl {
+                        AsyncImage(
+                            url: url,
+                            placeholder: { Text("Loading ...") },
+                            image: {
+                                Image(uiImage: $0)
+                                    .resizable()
+                            }
+                        )
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                         .clipped()
+                    } else {
+                        Text("No image available...")
+                            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                            .background(Rectangle().stroke())
+                    }
 
                     Text("1:04:43")
                         .font(.caption)
                         .foregroundColor(.black)
-                        .frame(width: .infinity, height: .infinity, alignment: .bottomTrailing)
-
                         .padding(4)
                         .background(Color.white)
                         .padding(2)

@@ -58,26 +58,44 @@ struct VideosListView: View {
 
     fileprivate func list(of items: [VideosListViewModel.VideoItem]) -> some View {
         List(items) { item in
-                HStack {
-                    ZStack(alignment: .bottomTrailing) {
-                        Image("peppa_pig_video_thumbnail")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(maxWidth: .infinity, maxHeight: 100)
+            NavigationLink(
+                destination: VideoDetailView(video: item),
+                label: {
+                    HStack {
+                        ZStack(alignment: .bottomTrailing) {
+                            if let url = item.imageThumbnailUrl {
+                                AsyncImage(
+                                    url: url,
+                                    placeholder: { Text("Loading ...") },
+                                    image: {
+                                        Image(uiImage: $0)
+                                            .resizable()
+                                    }
+                                )
+                                .aspectRatio(contentMode: .fill)
+                                .frame(maxWidth: .infinity, maxHeight: 100)
+                            } else {
+                                Image("peppa_pig_video_thumbnail")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(maxWidth: .infinity, maxHeight: 100)
+                                    .redacted(reason: .placeholder)
+                            }
 
-                        Text("1:04:43 ")
-                            .font(.caption)
-                            .foregroundColor(.black)
-                            .frame(width: .infinity, height: .infinity, alignment: .bottomTrailing)
-                            .padding(1)
-                            .background(Color.white)
-                            .padding(1)
+                            Text("1:04:43 ")
+                                .font(.caption)
+                                .foregroundColor(.black)
+                                .padding(1)
+                                .background(Color.white)
+                                .padding(1)
+                        }
+
+                        VideoInfoView(video: item)
+                            .padding(5)
                     }
-
-                    VideoInfoView(video: item)
-                        .padding(5)
-                }
-            }
+                })
+        }
+        .listStyle(PlainListStyle())
     }
 }
 

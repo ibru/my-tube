@@ -29,6 +29,7 @@ struct SearchBar: View {
                         if isEditing {
                             Button(action: {
                                 self.text = ""
+                                self.isEditing = false
                             }) {
                                 Image(systemName: "multiply.circle.fill")
                                     .foregroundColor(.gray)
@@ -40,21 +41,6 @@ struct SearchBar: View {
                 .onTapGesture {
                     self.isEditing = true
                 }
-
-            if isEditing {
-                HStack {
-                    Button(action: {
-                        self.isEditing = false
-                        self.text = ""
-
-                    }) {
-                        Text("Cancel")
-                    }
-                    .padding(.trailing, 10)
-                    .transition(.move(edge: .trailing))
-                    .animation(.default)
-                }
-            }
         }
     }
 }
