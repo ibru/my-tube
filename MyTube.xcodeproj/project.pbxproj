@@ -19,7 +19,6 @@
 		49495E2525C92F0400B5B616 /* EnvironmentValues+ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49495E2425C92F0400B5B616 /* EnvironmentValues+ImageCache.swift */; };
 		49495E4825CC05B200B5B616 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49495E4725CC05B200B5B616 /* VideoPlayerView.swift */; };
 		498782F825BE145D0079701A /* MyTubeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498782F725BE145D0079701A /* MyTubeApp.swift */; };
-		498782FA25BE145D0079701A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498782F925BE145D0079701A /* ContentView.swift */; };
 		498782FC25BE14600079701A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 498782FB25BE14600079701A /* Assets.xcassets */; };
 		498782FF25BE14600079701A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 498782FE25BE14600079701A /* Preview Assets.xcassets */; };
 		4987830125BE14600079701A /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987830025BE14600079701A /* Persistence.swift */; };
@@ -61,7 +60,6 @@
 		49495E4725CC05B200B5B616 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		498782F425BE145D0079701A /* MyTube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTube.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		498782F725BE145D0079701A /* MyTubeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTubeApp.swift; sourceTree = "<group>"; };
-		498782F925BE145D0079701A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		498782FB25BE14600079701A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		498782FE25BE14600079701A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4987830025BE14600079701A /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -102,13 +100,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		49206EFD25C037200088DBDF /* Feedback */ = {
+		49206EFD25C037200088DBDF /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				49206EFE25C0372C0088DBDF /* Feedback.swift */,
-				49206F0625C0374B0088DBDF /* System.swift */,
+				4987830025BE14600079701A /* Persistence.swift */,
+				4978DA4325CD1DFE0089C0F7 /* Repositories */,
+				4978DA4225CD1DF40089C0F7 /* Feedback */,
 			);
-			path = Feedback;
+			path = Core;
 			sourceTree = "<group>";
 		};
 		49495DF625C92E9400B5B616 /* Frameworks */ = {
@@ -128,6 +127,66 @@
 				49495E0025C92EB000B5B616 /* AsyncImage.swift */,
 			);
 			path = AsyncImage;
+			sourceTree = "<group>";
+		};
+		4978DA3D25CD1DA90089C0F7 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				4978DA4125CD1DC60089C0F7 /* Videos List */,
+				4978DA4425CD1E090089C0F7 /* Video Detail */,
+				4978DA4525CD1E170089C0F7 /* Video Player */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		4978DA4125CD1DC60089C0F7 /* Videos List */ = {
+			isa = PBXGroup;
+			children = (
+				4987832D25BE14D10079701A /* VideosListView.swift */,
+				49206EF825C035FC0088DBDF /* VideosListViewModel.swift */,
+			);
+			path = "Videos List";
+			sourceTree = "<group>";
+		};
+		4978DA4225CD1DF40089C0F7 /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				49206EFE25C0372C0088DBDF /* Feedback.swift */,
+				49206F0625C0374B0088DBDF /* System.swift */,
+			);
+			path = Feedback;
+			sourceTree = "<group>";
+		};
+		4978DA4325CD1DFE0089C0F7 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				49495DF125C4345C00B5B616 /* YoutubeVideosRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		4978DA4425CD1E090089C0F7 /* Video Detail */ = {
+			isa = PBXGroup;
+			children = (
+				4987833625BE93B10079701A /* VideoDetailView.swift */,
+			);
+			path = "Video Detail";
+			sourceTree = "<group>";
+		};
+		4978DA4525CD1E170089C0F7 /* Video Player */ = {
+			isa = PBXGroup;
+			children = (
+				49495E4725CC05B200B5B616 /* VideoPlayerView.swift */,
+			);
+			path = "Video Player";
+			sourceTree = "<group>";
+		};
+		4978DA4625CD1E2B0089C0F7 /* UI Components */ = {
+			isa = PBXGroup;
+			children = (
+				49206F0B25C041E90088DBDF /* SearchBar.swift */,
+			);
+			path = "UI Components";
 			sourceTree = "<group>";
 		};
 		498782EB25BE145D0079701A = {
@@ -154,17 +213,11 @@
 		498782F625BE145D0079701A /* MyTube */ = {
 			isa = PBXGroup;
 			children = (
-				49206EFD25C037200088DBDF /* Feedback */,
 				498782F725BE145D0079701A /* MyTubeApp.swift */,
-				4987832D25BE14D10079701A /* VideosListView.swift */,
-				49206EF825C035FC0088DBDF /* VideosListViewModel.swift */,
-				49495DF125C4345C00B5B616 /* YoutubeVideosRepository.swift */,
-				4987833625BE93B10079701A /* VideoDetailView.swift */,
-				49495E4725CC05B200B5B616 /* VideoPlayerView.swift */,
-				498782F925BE145D0079701A /* ContentView.swift */,
-				49206F0B25C041E90088DBDF /* SearchBar.swift */,
+				4978DA3D25CD1DA90089C0F7 /* Screens */,
+				4978DA4625CD1E2B0089C0F7 /* UI Components */,
+				49206EFD25C037200088DBDF /* Core */,
 				498782FB25BE14600079701A /* Assets.xcassets */,
-				4987830025BE14600079701A /* Persistence.swift */,
 				4987830525BE14600079701A /* Info.plist */,
 				4987830225BE14600079701A /* MyTube.xcdatamodeld */,
 				498782FD25BE14600079701A /* Preview Content */,
@@ -343,7 +396,6 @@
 				4987832E25BE14D10079701A /* VideosListView.swift in Sources */,
 				49495E0725C92EB000B5B616 /* ImageCache.swift in Sources */,
 				49206EF925C035FC0088DBDF /* VideosListViewModel.swift in Sources */,
-				498782FA25BE145D0079701A /* ContentView.swift in Sources */,
 				49206EFF25C0372C0088DBDF /* Feedback.swift in Sources */,
 				49206F0725C0374B0088DBDF /* System.swift in Sources */,
 				498782F825BE145D0079701A /* MyTubeApp.swift in Sources */,
