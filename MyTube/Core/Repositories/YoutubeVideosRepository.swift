@@ -37,19 +37,6 @@ final class YoutubeVideosRepository {
     }
 }
 
-extension YoutubeVideosRepository: VideosRepository {
-    func videos(matching searchText: String) -> AnyPublisher<[VideosListViewModel.VideoItem], Error> {
-        videos(for: searchText)
-            .map {
-                $0.map {
-                    VideosListViewModel.VideoItem(id: $0.id, title: $0.title, imageThumbnailUrl: $0.imageThumbnailUrl)
-                }
-            }
-            .mapError { $0 as Error }
-            .eraseToAnyPublisher()
-    }
-}
-
 struct YoutubeVideo {
     let id: String
     let videoUrl: URL

@@ -8,9 +8,37 @@
 import Foundation
 import Combine
 
+struct VideosListEnvironment {
+    var searchVideos: SearchVideosClient
+}
 
-protocol VideosRepository {
-    func videos(matching searchText: String) -> AnyPublisher<[VideosListViewModel.VideoItem], Error>
+extension VideosListEnvironment {
+    static var live: Self {
+        .init(
+            searchVideos: .live
+        )
+    }
+}
+
+struct SearchVideosClient {
+    var videosMatching: (String) -> AnyPublisher<[VideosListViewModel.VideoItem], Error>
+}
+
+extension SearchVideosClient {
+    static var live: Self {
+        .init(
+            videosMatching: {
+                YoutubeVideosRepository().videos(for: $0)
+                    .map {
+                        $0.map {
+                            VideosListViewModel.VideoItem(id: $0.id, title: $0.title, imageThumbnailUrl: $0.imageThumbnailUrl)
+                        }
+                    }
+                    .mapError { $0 as Error }
+                    .eraseToAnyPublisher()
+            }
+        )
+    }
 }
 
 final class VideosListViewModel: ObservableObject {
@@ -21,7 +49,7 @@ final class VideosListViewModel: ObservableObject {
     private let input = PassthroughSubject<Event, Never>()
 
 
-    init(initialState: State = .idle, videosRepository: VideosRepository) {
+    init(initialState: State = .init(), environment: VideosListEnvironment = .live) {
         state = initialState
 
         Publishers.system(
@@ -29,8 +57,8 @@ final class VideosListViewModel: ObservableObject {
             reduce: Self.reduce,
             scheduler: RunLoop.main,
             feedbacks: [
-                Self.searchString(using: videosRepository),
-                Self.debug(),
+                Self.searchString(using: environment.searchVideos),
+                //Self.debug(),
                 Self.userInput(input: input.eraseToAnyPublisher())
             ]
         )
@@ -51,11 +79,21 @@ extension VideosListViewModel {
     enum Error: Swift.Error, Equatable {
         case unknown
     }
-    enum State: Equatable {
-        case idle
-        case loading(String)
-        case loaded([VideoItem])
-        case error(Error)
+    struct State: Equatable {
+        enum LoadingState: Equatable {
+            case idle
+            case loading(String)
+            case loaded
+            case error(Error)
+        }
+
+        let loading: LoadingState
+        let videos: [VideoItem]
+
+        init(loading: LoadingState = .idle, videos: [VideoItem] = []) {
+            self.loading = loading
+            self.videos = videos
+        }
     }
 
     enum Event {
@@ -77,37 +115,15 @@ extension VideosListViewModel {
 
 extension VideosListViewModel {
     static func reduce(_ state: State, _ event: Event) -> State {
-        switch state {
-        case .idle:
-            switch event {
-            case .onSearch(let searchText):
-                return .loading(searchText)
-            default:
-                return state
-            }
+        switch event {
+        case .onSearch(let searchString):
+            return .init(loading: .loading(searchString), videos: state.videos)
 
-        case .loading:
-            switch event {
-            case .onLoadVideos(let videos):     return .loaded(videos)
-            case .onLoadVideosError(let error): return .error(error)
-            default:                            return state
-            }
+        case .onLoadVideos(let videos):
+            return .init(loading: .loaded, videos: videos)
 
-        case .loaded:
-            switch event {
-            case .onSearch(let searchText):
-                return .loading(searchText)
-            default:
-                return state
-            }
-
-        case .error:
-            switch event {
-            case .onSearch(let searchText):
-                return .loading(searchText)
-            default:
-                return state
-            }
+        default:
+            return state
         }
     }
 
@@ -122,29 +138,14 @@ extension VideosListViewModel {
         }
     }
 
-    static func searchString(using repository: VideosRepository) -> Feedback<State, Event> {
+    static func searchString(using searchVideos: SearchVideosClient) -> Feedback<State, Event> {
         Feedback { (state: State) -> AnyPublisher<Event, Never> in
-            guard case .loading(let searchText) = state else { return Empty().eraseToAnyPublisher() }
+            guard case .loading(let searchText) = state.loading else { return Empty().eraseToAnyPublisher() }
 
-            return repository.videos(matching: searchText)
+            return searchVideos.videosMatching(searchText)
                 .map(Event.onLoadVideos)
                 .replaceError(with: .onLoadVideosError(.unknown))
                 .eraseToAnyPublisher()
         }
-    }
-}
-
-
-// TODO: Move to separate file
-final class MockVideosRepository: VideosRepository {
-    func videos(matching searchText: String) -> AnyPublisher<[VideosListViewModel.VideoItem], Error> {
-        return Just([
-            .init(id: "123", title: "VIdeo title", imageThumbnailUrl: nil),
-            .init(id: "456", title: "VIdeo 2 title", imageThumbnailUrl: nil),
-            .init(id: "6789", title: "VIdeo 3 title", imageThumbnailUrl: nil)
-        ])
-        .setFailureType(to: Error.self)
-        .delay(for: .seconds(2), scheduler: RunLoop.main)
-        .eraseToAnyPublisher()
     }
 }

@@ -36,28 +36,7 @@ struct VideosListView: View {
     }
 
     var content: some View {
-        switch viewModel.state {
-        case .idle:
-            return Color.clear
-                .eraseToAnyView()
-        case .loading:
-            return List {
-                Text("Loading...")
-            }
-            .eraseToAnyView()
-
-        case .loaded(let items):
-            return list(of: items)
-                .eraseToAnyView()
-
-        case .error(let error):
-            return Text(error.localizedDescription)
-                .eraseToAnyView()
-        }
-    }
-
-    fileprivate func list(of items: [VideosListViewModel.VideoItem]) -> some View {
-        List(items) { item in
+        List(viewModel.state.videos) { item in
             NavigationLink(
                 destination: VideoDetailView(video: item),
                 label: {
@@ -99,20 +78,26 @@ struct VideosListView: View {
     }
 }
 
+import Combine
+
 struct VideosListView_Previews: PreviewProvider {
     static var previews: some View {
         VideosListView(
             viewModel: VideosListViewModel(
-                initialState: .loaded(items),
-                videosRepository: MockVideosRepository()
+                initialState: .init(loading: .loaded, videos: items),
+                environment: VideosListEnvironment(searchVideos: SearchVideosClient(videosMatching: { _ in
+                    Just(items)
+                        .setFailureType(to: Error.self)
+                        .eraseToAnyPublisher()
+                }))
             )
         )
     }
 
     static var items: [VideosListViewModel.VideoItem] = [
-        .init(id: "123", title: "VIdeo title", imageThumbnailUrl: nil),
-        .init(id: "456", title: "VIdeo 2 title", imageThumbnailUrl: nil),
-        .init(id: "6789", title: "VIdeo 3 title", imageThumbnailUrl: nil)
+        .init(id: "123", title: "Video title", imageThumbnailUrl: nil),
+        .init(id: "456", title: "Video 2 title", imageThumbnailUrl: nil),
+        .init(id: "6789", title: "Video 3 title", imageThumbnailUrl: nil)
     ]
 
     static let error: Error = NSError(domain: "Preview", code: 1, userInfo: [NSLocalizedDescriptionKey: "This is preview error."])
