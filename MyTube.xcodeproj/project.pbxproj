@@ -22,7 +22,6 @@
 		4954F01326286DB2008D0B60 /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4954F01226286DB2008D0B60 /* Reducer.swift */; };
 		4954F02226286F26008D0B60 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4954F02126286F25008D0B60 /* Store.swift */; };
 		4954F0272628724D008D0B60 /* Effect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4954F0262628724C008D0B60 /* Effect.swift */; };
-		4954F03026287596008D0B60 /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = 4954F02F26287596008D0B60 /* CasePaths */; };
 		498782F825BE145D0079701A /* MyTubeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498782F725BE145D0079701A /* MyTubeApp.swift */; };
 		498782FC25BE14600079701A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 498782FB25BE14600079701A /* Assets.xcassets */; };
 		498782FF25BE14600079701A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 498782FE25BE14600079701A /* Preview Assets.xcassets */; };
@@ -88,7 +87,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4954F03026287596008D0B60 /* CasePaths in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,7 +272,6 @@
 			);
 			name = MyTube;
 			packageProductDependencies = (
-				4954F02F26287596008D0B60 /* CasePaths */,
 			);
 			productName = MyTube;
 			productReference = 498782F425BE145D0079701A /* MyTube.app */;
@@ -352,7 +349,6 @@
 			mainGroup = 498782EB25BE145D0079701A;
 			packageReferences = (
 				499F7E0F25C142600099C1B0 /* XCRemoteSwiftPackageReference "CombineExpectations" */,
-				4954F02E26287596008D0B60 /* XCRemoteSwiftPackageReference "swift-case-paths" */,
 			);
 			productRefGroup = 498782F525BE145D0079701A /* Products */;
 			projectDirPath = "";
@@ -736,14 +732,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		4954F02E26287596008D0B60 /* XCRemoteSwiftPackageReference "swift-case-paths" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-case-paths.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.3;
-			};
-		};
 		499F7E0F25C142600099C1B0 /* XCRemoteSwiftPackageReference "CombineExpectations" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/groue/CombineExpectations.git";
@@ -755,11 +743,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4954F02F26287596008D0B60 /* CasePaths */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4954F02E26287596008D0B60 /* XCRemoteSwiftPackageReference "swift-case-paths" */;
-			productName = CasePaths;
-		};
 		499F7E1025C142600099C1B0 /* CombineExpectations */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 499F7E0F25C142600099C1B0 /* XCRemoteSwiftPackageReference "CombineExpectations" */;

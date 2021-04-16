@@ -9,15 +9,6 @@
           "revision": "5c36f3199960776fc055196a93ca04bfc00e1857",
           "version": "0.7.0"
         }
-      },
-      {
-        "package": "swift-case-paths",
-        "repositoryURL": "https://github.com/pointfreeco/swift-case-paths.git",
-        "state": {
-          "branch": null,
-          "revision": "1aa1bf7c4069d9ba2f7edd36dbfc96ff1c58cbff",
-          "version": "0.1.3"
-        }
       }
     ]
   },
