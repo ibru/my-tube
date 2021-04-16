@@ -12,6 +12,8 @@ import CombineExpectations
 
 class VideosListViewModelTests: XCTestCase {
 
+    private var bag = Set<AnyCancellable>()
+
     func testShouldStartEmpty() {
         let viewModel = VideosListViewModel()
 
@@ -21,7 +23,7 @@ class VideosListViewModelTests: XCTestCase {
 
     func testSearchForShouldPassSearchedStringToVideosRepository() throws {
         var actualSearchString = ""
-        let environment = VideosListEnvironment(searchVideos: SearchVideosClient(videosMatching: {
+        let environment = VideosListViewModel.Environment(searchVideos: SearchVideosClient(videosMatching: {
             actualSearchString = $0
             return Just([])
                 .setFailureType(to: Error.self)
@@ -32,12 +34,37 @@ class VideosListViewModelTests: XCTestCase {
         let viewModel = VideosListViewModel(environment: environment)
         let expectedSearchString = "search"
 
+        let recorder = viewModel.$state
+            .dropFirst()
+            .record()
+            .next(1)
+
         viewModel.send(event: .onSearch(expectedSearchString))
+
+        _ = try wait(for: recorder, timeout: 0.20)
+
+        XCTAssertEqual(actualSearchString, expectedSearchString)
+    }
+
+    func testSearchForShouldPassSearchedStringToVideosRepository_StoreReducerEffect() throws {
+        var actualSearchString = ""
+        let environment = VideosListViewModel.Environment(searchVideos: SearchVideosClient(videosMatching: {
+            actualSearchString = $0
+            return Just([])
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher()
+
+        }))
+
+        let viewModel = VideosListViewModel(reducer: VideosListViewModel.reducer, environment: environment)
+        let expectedSearchString = "search"
 
         let recorder = viewModel.$state
             .dropFirst()
             .record()
             .next(1)
+
+        viewModel.send(event: .onSearch(expectedSearchString))
 
         _ = try wait(for: recorder, timeout: 0.20)
 
@@ -49,23 +76,16 @@ class VideosListViewModelTests: XCTestCase {
             .init(id: "id1", title: "Video 1", imageThumbnailUrl: nil),
             .init(id: "id2", title: "Video 2", imageThumbnailUrl: URL(string: "http://example.com"))
         ]
-
-        let environment = VideosListEnvironment(searchVideos: SearchVideosClient(videosMatching: { _ in
-            Just(videos)
-                .setFailureType(to: Error.self)
-                .eraseToAnyPublisher()
-        }))
         let searchString = "search"
 
-        let viewModel = VideosListViewModel(environment: environment)
-
-        viewModel.send(event: .onSearch(searchString))
+        let viewModel = VideosListViewModel(reducer: VideosListViewModel.reducer, environment: .mock(with: videos))
 
         let recorder = viewModel.$state
             .dropFirst()
             .record()
             .next(2)
 
+        viewModel.send(event: .onSearch(searchString))
 
         let states = try wait(for: recorder, timeout: 0.20)
 
@@ -91,13 +111,12 @@ class VideosListViewModelTests: XCTestCase {
         let searchString1 = "search1"
         let searchString2 = "search2"
 
-        let environment = VideosListEnvironment(searchVideos: SearchVideosClient(videosMatching: { _ in
-            Just(videos)
-                .setFailureType(to: Error.self)
-                .eraseToAnyPublisher()
-        }))
+        let viewModel = VideosListViewModel(environment: .mock(with: videos))
 
-        let viewModel = VideosListViewModel(environment: environment)
+        let recorder = viewModel.$state
+            .dropFirst()
+            .record()
+            .next(4)
 
         viewModel.send(event: .onSearch(searchString1))
 
@@ -106,11 +125,6 @@ class VideosListViewModelTests: XCTestCase {
 
             viewModel.send(event: .onSearch(searchString2))
         }
-
-        let recorder = viewModel.$state
-            .dropFirst()
-            .record()
-            .next(4)
 
         let states = try wait(for: recorder, timeout: 0.20)
 
@@ -124,11 +138,29 @@ class VideosListViewModelTests: XCTestCase {
         XCTAssertEqual(states, expectedStates)
     }
 
-    func testReduceShouldChangeStateToLoadingWhenIdleStateReceivesOnSearchEvent() {
+    func testReduceShouldChangeStateFromIdleToLoadingWhenItReceivesOnSearchEvent() {
         let searchString = "search"
+        var state: VideosListViewModel.State = .init(loading:.idle, videos: [])
 
-        let state = VideosListViewModel.reduce(.init(loading:.idle, videos: []), .onSearch(searchString))
+        _ = VideosListViewModel.reducer.run(&state, .onSearch(searchString), .dummy)
 
         XCTAssertEqual(state, .init(loading: .loading(searchString), videos: []))
+    }
+}
+
+
+private extension VideosListViewModel.Environment {
+    static var dummy: Self {
+        return .mock(with: [])
+    }
+
+    static func mock(with videos: [VideosListViewModel.VideoItem]) -> Self {
+        .init(
+            searchVideos: SearchVideosClient(
+                videosMatching: { _ in
+                    Just(videos)
+                        .setFailureType(to: Error.self)
+                        .eraseToAnyPublisher()
+                }))
     }
 }

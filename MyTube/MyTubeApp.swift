@@ -13,7 +13,15 @@ struct MyTubeApp: App {
 
     var body: some Scene {
         WindowGroup {
-            VideosListView(viewModel: VideosListViewModel())
+            VideosListView(
+                viewModel: VideosListViewModel(
+                    initialState: .init(
+                        videos:[
+                            .init(id: "123", title: "Video title", imageThumbnailUrl: nil),
+                            .init(id: "456", title: "Video 2 title", imageThumbnailUrl: nil),
+                            .init(id: "6789", title: "Video 3 title", imageThumbnailUrl: nil)
+                        ]
+                    )))
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

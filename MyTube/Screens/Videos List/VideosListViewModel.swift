@@ -8,70 +8,34 @@
 import Foundation
 import Combine
 
-struct VideosListEnvironment {
-    var searchVideos: SearchVideosClient
-}
-
-extension VideosListEnvironment {
-    static var live: Self {
-        .init(
-            searchVideos: .live
-        )
-    }
-}
-
-struct SearchVideosClient {
-    var videosMatching: (String) -> AnyPublisher<[VideosListViewModel.VideoItem], Error>
-}
-
-extension SearchVideosClient {
-    static var live: Self {
-        .init(
-            videosMatching: {
-                YoutubeVideosRepository().videos(for: $0)
-                    .map {
-                        $0.map {
-                            VideosListViewModel.VideoItem(id: $0.id, title: $0.title, imageThumbnailUrl: $0.imageThumbnailUrl)
-                        }
-                    }
-                    .mapError { $0 as Error }
-                    .eraseToAnyPublisher()
-            }
-        )
-    }
-}
-
 final class VideosListViewModel: ObservableObject {
     @Published var state: State
 
+    public var store: Store<State, Action>!
+
     private var bag = Set<AnyCancellable>()
 
-    private let input = PassthroughSubject<Event, Never>()
+    convenience init(
+        initialState: State = .init(),
+        reducer: Reducer<State, Action, Environment> = VideosListViewModel.reducer,
+        environment: Environment = .live
+    ) {
+        self.init(store: Store(initialState: initialState, reducer: reducer, environment: environment))
+    }
 
+    init(store: Store<State, Action>) {
+        self.store = store
+        self.state = store.state
 
-    init(initialState: State = .init(), environment: VideosListEnvironment = .live) {
-        state = initialState
-
-        Publishers.system(
-            initial: state,
-            reduce: Self.reduce,
-            scheduler: RunLoop.main,
-            feedbacks: [
-                Self.searchString(using: environment.searchVideos),
-                //Self.debug(),
-                Self.userInput(input: input.eraseToAnyPublisher())
-            ]
-        )
-        .assign(to: \.state, on: self)
-        .store(in: &bag)
+        store.$state.assign(to: &self.$state)
     }
 
     deinit {
         bag.removeAll()
     }
 
-    func send(event: Event) {
-        input.send(event)
+    func send(event: Action) {
+        store.send(event)
     }
 }
 
@@ -79,6 +43,7 @@ extension VideosListViewModel {
     enum Error: Swift.Error, Equatable {
         case unknown
     }
+
     struct State: Equatable {
         enum LoadingState: Equatable {
             case idle
@@ -87,20 +52,39 @@ extension VideosListViewModel {
             case error(Error)
         }
 
-        let loading: LoadingState
-        let videos: [VideoItem]
+        var loading: LoadingState
+        var videos: [VideoItem]
+        
+        var likedVideoIDs: Set<String>
 
-        init(loading: LoadingState = .idle, videos: [VideoItem] = []) {
+        init(loading: LoadingState = .idle, videos: [VideoItem] = [], likedVideoIDs: Set<String> = []) {
             self.loading = loading
             self.videos = videos
+            self.likedVideoIDs = likedVideoIDs
+        }
+
+        func isLiked(videoId: String) -> Bool {
+            likedVideoIDs.contains(videoId)
         }
     }
 
-    enum Event {
+    enum Action {
         case onAppear
         case onSearch(String)
         case onLoadVideos([VideoItem])
         case onLoadVideosError(Error)
+    }
+
+    struct Environment {
+        var searchVideos: SearchVideosClient
+    }
+}
+
+extension VideosListViewModel.Environment {
+    static var live: Self {
+        .init(
+            searchVideos: .live
+        )
     }
 }
 
@@ -112,40 +96,38 @@ extension VideosListViewModel {
     }
 }
 
+extension VideosListViewModel {
+    static var reducer: Reducer<State, Action, Environment> = {
+        Reducer<State, Action, Environment> { (state, action, environment) -> Effect<Action, Never> in
+            switch action {
+            case .onSearch(let searchString):
+                state.loading = .loading(searchString)
+                return Effects.searchStringPublisher(searchText: searchString, using: environment.searchVideos)
+
+            case .onLoadVideos(let videos):
+                state.loading = .loaded
+                state.videos = videos
+                return .none
+
+            case .onAppear:
+                // TOOD: load saved videos
+                return .none
+
+            case .onLoadVideosError(_):
+                return .none
+            }
+        }
+    }()
+}
 
 extension VideosListViewModel {
-    static func reduce(_ state: State, _ event: Event) -> State {
-        switch event {
-        case .onSearch(let searchString):
-            return .init(loading: .loading(searchString), videos: state.videos)
-
-        case .onLoadVideos(let videos):
-            return .init(loading: .loaded, videos: videos)
-
-        default:
-            return state
-        }
-    }
-
-    static func userInput(input: AnyPublisher<Event, Never>) -> Feedback<State, Event> {
-        Feedback { _ in input }
-    }
-
-    static func debug() -> Feedback<State, Event> {
-        Feedback { (state: State) -> AnyPublisher<Event, Never> in
-            print("State changed: \(state)")
-            return Empty().eraseToAnyPublisher()
-        }
-    }
-
-    static func searchString(using searchVideos: SearchVideosClient) -> Feedback<State, Event> {
-        Feedback { (state: State) -> AnyPublisher<Event, Never> in
-            guard case .loading(let searchText) = state.loading else { return Empty().eraseToAnyPublisher() }
-
-            return searchVideos.videosMatching(searchText)
-                .map(Event.onLoadVideos)
+    struct Effects {
+        static func searchStringPublisher(searchText: String, using client: SearchVideosClient) -> Effect<Action, Never> {
+            client.videosMatching(searchText)
+                .map(Action.onLoadVideos)
                 .replaceError(with: .onLoadVideosError(.unknown))
                 .eraseToAnyPublisher()
+                .eraseToEffect()
         }
     }
 }

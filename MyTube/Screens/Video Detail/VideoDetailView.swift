@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct VideoDetailView: View {
-    var video: VideosListViewModel.VideoItem
+    //var video: VideosListViewModel.VideoItem
+    @ObservedObject var viewModel: VideoDetailViewModel
 
     var body: some View {
         VStack {
             ZStack {
                 ZStack(alignment: .bottomTrailing) {
-                    if let url = video.imageThumbnailUrl {
+                    if let url = viewModel.video.imageThumbnailUrl {
                         AsyncImage(
                             url: url,
                             placeholder: { Text("Loading ...") },
@@ -50,12 +51,18 @@ struct VideoDetailView: View {
                 })
             }
 
-            VideoInfoView(video: video)
+            VideoInfoView(video: viewModel.video, isLiked: viewModel.isLiked)
                 .padding()
 
 
-            Button(action: {}, label: {
-                Label("Add to Favorites", systemImage: "star")
+            Button(action: {
+                viewModel.toggleLikeVideo()
+            }, label: {
+                if viewModel.isLiked {
+                    Label("Remove from Favorites", systemImage: "star.fill")
+                } else {
+                    Label("Add to Favorites", systemImage: "star")
+                }
             })
             .padding(6)
 
@@ -67,20 +74,47 @@ struct VideoDetailView: View {
     }
 }
 
+import Combine
+
 struct VideoDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            VideoDetailView(video: .init(id: "123", title: "VIdeo title", imageThumbnailUrl: nil))
+            VideoDetailView(
+                viewModel: VideoDetailViewModel(
+                    store: .init(
+                        initialState: .init(
+                            video: .init(id: "123", title: "VIdeo title", imageThumbnailUrl: nil),
+                            isLiked: true,
+                            likeVideoError: nil
+                        ),
+                        reducer: .empty,
+                        environment: VideoDetailViewModel.Environment(
+                            likeVideo: .init(
+                                likeWithID: { _ in
+                                    Just(true)
+                                        .setFailureType(to: Error.self)
+                                        .eraseToAnyPublisher()
+                                }, dislikeWithID: { _ in
+                                    Just(true)
+                                        .setFailureType(to: Error.self)
+                                        .eraseToAnyPublisher()
+                                }
+                            )
+                        )
+                    )
+                )
+            )
         }
     }
 }
 
 struct VideoInfoView: View {
-    var video: VideosListViewModel.VideoItem
+    let video: VideosListViewModel.VideoItem
+    let isLiked: Bool
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(video.title)
+            Text(video.title + (isLiked ? " ✰" : ""))
                 .font(.headline)
                 .lineLimit(2)
             Text("225k views")

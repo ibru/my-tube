@@ -38,7 +38,24 @@ struct VideosListView: View {
     var content: some View {
         List(viewModel.state.videos) { item in
             NavigationLink(
-                destination: VideoDetailView(video: item),
+                destination: VideoDetailView(
+                    viewModel: VideoDetailViewModel(
+                        store: viewModel.store.scope(
+                            toLocalState: {
+                                .init(video: item, isLiked: $0.isLiked(videoId: item.id))
+                            },
+                            updateGlobalState: { global, local in
+                                if local.isLiked {
+                                    global.likedVideoIDs.insert(local.video.id)
+                                } else {
+                                    global.likedVideoIDs.remove(local.video.id)
+                                }
+                            },
+                            environment: .live,
+                            using: VideoDetailViewModel.reducer
+                        )
+                    )
+                ),
                 label: {
                     HStack {
                         ZStack(alignment: .bottomTrailing) {
@@ -69,7 +86,7 @@ struct VideosListView: View {
                                 .padding(1)
                         }
 
-                        VideoInfoView(video: item)
+                        VideoInfoView(video: item, isLiked: viewModel.state.likedVideoIDs.contains(item.id))
                             .padding(5)
                     }
                 })
@@ -85,7 +102,7 @@ struct VideosListView_Previews: PreviewProvider {
         VideosListView(
             viewModel: VideosListViewModel(
                 initialState: .init(loading: .loaded, videos: items),
-                environment: VideosListEnvironment(searchVideos: SearchVideosClient(videosMatching: { _ in
+                environment: VideosListViewModel.Environment(searchVideos: SearchVideosClient(videosMatching: { _ in
                     Just(items)
                         .setFailureType(to: Error.self)
                         .eraseToAnyPublisher()
