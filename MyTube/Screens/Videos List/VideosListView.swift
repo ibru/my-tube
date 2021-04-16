@@ -86,7 +86,7 @@ struct VideosListView: View {
                                 .padding(1)
                         }
 
-                        VideoInfoView(video: item, isLiked: viewModel.state.likedVideoIDs.contains(item.id))
+                        VideoInfoView(video: item, isLiked: viewModel.state.isLiked(videoId: item.id))
                             .padding(5)
                     }
                 })
