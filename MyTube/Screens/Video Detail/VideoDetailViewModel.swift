@@ -16,7 +16,6 @@ final class VideoDetailViewModel: ObservableObject {
 
     init(store: Store<State, Action>) {
         self.store = store
-
         self.isLiked = store.state.isLiked
         self.video = store.state.video
 
@@ -34,6 +33,8 @@ final class VideoDetailViewModel: ObservableObject {
 }
 
 extension VideoDetailViewModel {
+    typealias StoreType = Store<State, Action>
+
     enum Error: Swift.Error, Equatable {
         case couldNotLikeVideo
         case couldNotDislikeVideo

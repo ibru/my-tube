@@ -39,22 +39,7 @@ struct VideosListView: View {
         List(viewModel.state.videos) { item in
             NavigationLink(
                 destination: VideoDetailView(
-                    viewModel: VideoDetailViewModel(
-                        store: viewModel.store.scope(
-                            toLocalState: {
-                                .init(video: item, isLiked: $0.isLiked(videoId: item.id))
-                            },
-                            updateGlobalState: { global, local in
-                                if local.isLiked {
-                                    global.likedVideoIDs.insert(local.video.id)
-                                } else {
-                                    global.likedVideoIDs.remove(local.video.id)
-                                }
-                            },
-                            environment: .live,
-                            using: VideoDetailViewModel.reducer
-                        )
-                    )
+                    viewModel: VideoDetailViewModel(store: .videoDetail(from: viewModel.store, for: item))
                 ),
                 label: {
                     HStack {

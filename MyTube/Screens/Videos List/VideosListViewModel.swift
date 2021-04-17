@@ -27,7 +27,9 @@ final class VideosListViewModel: ObservableObject {
         self.store = store
         self.state = store.state
 
-        store.$state.assign(to: &self.$state)
+
+        store.publisher.assign(to: &self.$state)
+        //store.$state.assign(to: &self.$state)
     }
 
     deinit {
@@ -40,6 +42,8 @@ final class VideosListViewModel: ObservableObject {
 }
 
 extension VideosListViewModel {
+    typealias StoreType = Store<State, Action>
+    
     enum Error: Swift.Error, Equatable {
         case unknown
     }

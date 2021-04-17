@@ -25,38 +25,10 @@ class VideosListViewModelTests: XCTestCase {
         var actualSearchString = ""
         let environment = VideosListViewModel.Environment(searchVideos: SearchVideosClient(videosMatching: {
             actualSearchString = $0
-            return Just([])
-                .setFailureType(to: Error.self)
-                .eraseToAnyPublisher()
-
+            return .just([])
         }))
 
         let viewModel = VideosListViewModel(environment: environment)
-        let expectedSearchString = "search"
-
-        let recorder = viewModel.$state
-            .dropFirst()
-            .record()
-            .next(1)
-
-        viewModel.send(event: .onSearch(expectedSearchString))
-
-        _ = try wait(for: recorder, timeout: 0.20)
-
-        XCTAssertEqual(actualSearchString, expectedSearchString)
-    }
-
-    func testSearchForShouldPassSearchedStringToVideosRepository_StoreReducerEffect() throws {
-        var actualSearchString = ""
-        let environment = VideosListViewModel.Environment(searchVideos: SearchVideosClient(videosMatching: {
-            actualSearchString = $0
-            return Just([])
-                .setFailureType(to: Error.self)
-                .eraseToAnyPublisher()
-
-        }))
-
-        let viewModel = VideosListViewModel(reducer: VideosListViewModel.reducer, environment: environment)
         let expectedSearchString = "search"
 
         let recorder = viewModel.$state
@@ -157,10 +129,8 @@ private extension VideosListViewModel.Environment {
     static func mock(with videos: [VideosListViewModel.VideoItem]) -> Self {
         .init(
             searchVideos: SearchVideosClient(
-                videosMatching: { _ in
-                    Just(videos)
-                        .setFailureType(to: Error.self)
-                        .eraseToAnyPublisher()
-                }))
+                videosMatching: { _ in .just(videos) }
+            )
+        )
     }
 }
