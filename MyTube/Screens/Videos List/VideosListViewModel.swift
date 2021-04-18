@@ -9,27 +9,25 @@ import Foundation
 import Combine
 
 final class VideosListViewModel: ObservableObject {
-    @Published var state: State
+    @Published var state: State // TODO: State should belong to Entities layer, not UI layer.
 
-    public var store: Store<State, Action>!
+    private var store: Store<State, Action>!
 
     private var bag = Set<AnyCancellable>()
 
     convenience init(
         initialState: State = .init(),
-        reducer: Reducer<State, Action, Environment> = VideosListViewModel.reducer,
+        reducer: ReducerType = VideosListViewModel.reducer,
         environment: Environment = .live
     ) {
-        self.init(store: Store(initialState: initialState, reducer: reducer, environment: environment))
+        self.init(store: .init(initialState: initialState, reducer: reducer, environment: environment))
     }
 
-    init(store: Store<State, Action>) {
+    init(store: StoreType) {
         self.store = store
         self.state = store.state
 
-
-        store.publisher.assign(to: &self.$state)
-        //store.$state.assign(to: &self.$state)
+        store.$state.assign(to: &self.$state)
     }
 
     deinit {
@@ -101,8 +99,10 @@ extension VideosListViewModel {
 }
 
 extension VideosListViewModel {
-    static var reducer: Reducer<State, Action, Environment> = {
-        Reducer<State, Action, Environment> { (state, action, environment) -> Effect<Action, Never> in
+    typealias ReducerType = Reducer<State, Action, Environment>
+
+    static var reducer: ReducerType = {
+        .init { (state, action, environment) -> Effect<Action, Never> in
             switch action {
             case .onSearch(let searchString):
                 state.loading = .loading(searchString)
@@ -114,10 +114,11 @@ extension VideosListViewModel {
                 return .none
 
             case .onAppear:
-                // TOOD: load saved videos
+                // TODO: load saved videos
                 return .none
 
             case .onLoadVideosError(_):
+                // TODO: present error to UI
                 return .none
             }
         }
@@ -133,5 +134,32 @@ extension VideosListViewModel {
                 .eraseToAnyPublisher()
                 .eraseToEffect()
         }
+    }
+}
+
+extension VideosListViewModel.StoreType {
+    static func create(
+        initialState: VideosListViewModel.State = .init(),
+        reducer: Reducer<VideosListViewModel.State, VideosListViewModel.Action, VideosListViewModel.Environment> = VideosListViewModel.reducer,
+        environment: VideosListViewModel.Environment = .live
+    ) -> Self {
+        .init(initialState: initialState, reducer: reducer, environment: environment)
+    }
+}
+
+extension VideosListViewModel {
+    func viewModel(
+        forDetailOf item: VideosListViewModel.VideoItem,
+        environment: VideoDetailViewModel.Environment = .live
+    ) -> VideoDetailViewModel {
+        let detailStore: VideoDetailViewModel.StoreType =
+            store.scope(
+                toLocalState: { VideoDetailViewModel.StoreType.toLocalState(for: item, globalState: $0) },
+                updateGlobalState: VideoDetailViewModel.StoreType.update(global:from:),
+                environment: environment,
+                using: VideoDetailViewModel.reducer
+            )
+        
+        return .init(store: detailStore)
     }
 }

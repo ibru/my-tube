@@ -12,9 +12,9 @@ final class VideoDetailViewModel: ObservableObject {
     @Published var isLiked: Bool
     @Published var video: VideosListViewModel.VideoItem
 
-    public var store: Store<State, Action>!
+    private var store: StoreType
 
-    init(store: Store<State, Action>) {
+    init(store: StoreType) {
         self.store = store
         self.isLiked = store.state.isLiked
         self.video = store.state.video
@@ -66,8 +66,10 @@ extension VideoDetailViewModel {
 }
 
 extension VideoDetailViewModel {
-    static var reducer: Reducer<State, Action, Environment> = {
-        Reducer<State, Action, Environment> { state, action, environment in
+    typealias ReducerType = Reducer<State, Action, Environment>
+
+    static var reducer: ReducerType = {
+        .init { state, action, environment in
             switch action {
             case .likeVideo:
                 return Effects.likeVideo(id: state.video.id, using: environment.likeVideo)
@@ -113,5 +115,19 @@ extension VideoDetailViewModel {
 extension VideoDetailViewModel.Environment {
     static var live: Self {
         .init(likeVideo: .live)
+    }
+}
+
+extension VideoDetailViewModel.StoreType {
+    static func toLocalState(for selectedItem: VideosListViewModel.VideoItem, globalState: VideosListViewModel.State) -> (VideoDetailViewModel.State) {
+        .init(video: selectedItem, isLiked: globalState.isLiked(videoId: selectedItem.id))
+    }
+
+    static func update(global: inout VideosListViewModel.State, from local: VideoDetailViewModel.State) {
+        if local.isLiked {
+            global.likedVideoIDs.insert(local.video.id)
+        } else {
+            global.likedVideoIDs.remove(local.video.id)
+        }
     }
 }

@@ -39,7 +39,7 @@ struct VideosListView: View {
         List(viewModel.state.videos) { item in
             NavigationLink(
                 destination: VideoDetailView(
-                    viewModel: VideoDetailViewModel(store: .videoDetail(from: viewModel.store, for: item))
+                    viewModel: viewModel.viewModel(forDetailOf: item)
                 ),
                 label: {
                     HStack {
