@@ -33,7 +33,6 @@
 		498782FF25BE14600079701A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 498782FE25BE14600079701A /* Preview Assets.xcassets */; };
 		4987830125BE14600079701A /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987830025BE14600079701A /* Persistence.swift */; };
 		4987830425BE14600079701A /* MyTube.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4987830225BE14600079701A /* MyTube.xcdatamodeld */; };
-		4987831A25BE14600079701A /* MyTubeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987831925BE14600079701A /* MyTubeUITests.swift */; };
 		4987832E25BE14D10079701A /* VideosListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987832D25BE14D10079701A /* VideosListView.swift */; };
 		4987833725BE93B10079701A /* VideoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987833625BE93B10079701A /* VideoDetailView.swift */; };
 		499F7E1125C142600099C1B0 /* CombineExpectations in Frameworks */ = {isa = PBXBuildFile; productRef = 499F7E1025C142600099C1B0 /* CombineExpectations */; };
@@ -41,13 +40,6 @@
 
 /* Begin PBXContainerItemProxy section */
 		4987830B25BE14600079701A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 498782EC25BE145D0079701A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 498782F325BE145D0079701A;
-			remoteInfo = MyTube;
-		};
-		4987831625BE14600079701A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 498782EC25BE145D0079701A /* Project object */;
 			proxyType = 1;
@@ -87,7 +79,6 @@
 		4987830525BE14600079701A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4987830A25BE14600079701A /* MyTubeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyTubeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4987831025BE14600079701A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4987831525BE14600079701A /* MyTubeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyTubeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4987831925BE14600079701A /* MyTubeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTubeUITests.swift; sourceTree = "<group>"; };
 		4987831B25BE14600079701A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4987832D25BE14D10079701A /* VideosListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosListView.swift; sourceTree = "<group>"; };
@@ -107,13 +98,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				499F7E1125C142600099C1B0 /* CombineExpectations in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4987831225BE14600079701A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,7 +232,6 @@
 			children = (
 				498782F425BE145D0079701A /* MyTube.app */,
 				4987830A25BE14600079701A /* MyTubeTests.xctest */,
-				4987831525BE14600079701A /* MyTubeUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -340,24 +323,6 @@
 			productReference = 4987830A25BE14600079701A /* MyTubeTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		4987831425BE14600079701A /* MyTubeUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4987832425BE14600079701A /* Build configuration list for PBXNativeTarget "MyTubeUITests" */;
-			buildPhases = (
-				4987831125BE14600079701A /* Sources */,
-				4987831225BE14600079701A /* Frameworks */,
-				4987831325BE14600079701A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4987831725BE14600079701A /* PBXTargetDependency */,
-			);
-			name = MyTubeUITests;
-			productName = MyTubeUITests;
-			productReference = 4987831525BE14600079701A /* MyTubeUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -371,10 +336,6 @@
 						CreatedOnToolsVersion = 12.2;
 					};
 					4987830925BE14600079701A = {
-						CreatedOnToolsVersion = 12.2;
-						TestTargetID = 498782F325BE145D0079701A;
-					};
-					4987831425BE14600079701A = {
 						CreatedOnToolsVersion = 12.2;
 						TestTargetID = 498782F325BE145D0079701A;
 					};
@@ -398,7 +359,6 @@
 			targets = (
 				498782F325BE145D0079701A /* MyTube */,
 				4987830925BE14600079701A /* MyTubeTests */,
-				4987831425BE14600079701A /* MyTubeUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -414,13 +374,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		4987830825BE14600079701A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4987831325BE14600079701A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -470,14 +423,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4987831125BE14600079701A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4987831A25BE14600079701A /* MyTubeUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -485,11 +430,6 @@
 			isa = PBXTargetDependency;
 			target = 498782F325BE145D0079701A /* MyTube */;
 			targetProxy = 4987830B25BE14600079701A /* PBXContainerItemProxy */;
-		};
-		4987831725BE14600079701A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 498782F325BE145D0079701A /* MyTube */;
-			targetProxy = 4987831625BE14600079701A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -698,46 +638,6 @@
 			};
 			name = Release;
 		};
-		4987832525BE14600079701A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = DT55KV28NQ;
-				INFOPLIST_FILE = MyTubeUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.jiriurbasek.MyTubeUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = MyTube;
-			};
-			name = Debug;
-		};
-		4987832625BE14600079701A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = DT55KV28NQ;
-				INFOPLIST_FILE = MyTubeUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.jiriurbasek.MyTubeUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = MyTube;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -764,15 +664,6 @@
 			buildConfigurations = (
 				4987832225BE14600079701A /* Debug */,
 				4987832325BE14600079701A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4987832425BE14600079701A /* Build configuration list for PBXNativeTarget "MyTubeUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4987832525BE14600079701A /* Debug */,
-				4987832625BE14600079701A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
