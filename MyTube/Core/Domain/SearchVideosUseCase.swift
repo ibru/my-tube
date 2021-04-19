@@ -1,5 +1,5 @@
 //
-//  SearchVideosClient.swift
+//  SearchVideosUseCase.swift
 //  MyTube
 //
 //  Created by Jiri Urbasek on 4/16/21.
@@ -8,11 +8,11 @@
 import Foundation
 import Combine
 
-struct SearchVideosClient {
-    var videosMatching: (String) -> AnyPublisher<[VideosListViewModel.VideoItem], Error>
+struct SearchVideosUseCase {
+    var videosMatching: (String) -> AnyPublisher<[Video], Error>
 }
 
-extension SearchVideosClient {
+extension SearchVideosUseCase {
     static var live: Self {
         .init(
             videosMatching: {

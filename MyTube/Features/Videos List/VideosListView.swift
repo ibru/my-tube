@@ -19,7 +19,7 @@ struct VideosListView: View {
                         .padding(.leading, 10)
 
                     Button(action: {
-                        viewModel.send(event: .onSearch(searchText))
+                        viewModel.searchVideos(for: searchText)
                     }, label: {
                         Text("Search")
                     })
@@ -31,12 +31,12 @@ struct VideosListView: View {
             .navigationTitle("Search videos")
         }
         .onAppear {
-            viewModel.send(event: .onAppear)
+            viewModel.viewAppeared()
         }
     }
 
     var content: some View {
-        List(viewModel.state.videos) { item in
+        List(viewModel.videos) { item in
             NavigationLink(
                 destination: VideoDetailView(
                     viewModel: viewModel.viewModel(forDetailOf: item)
@@ -71,7 +71,7 @@ struct VideosListView: View {
                                 .padding(1)
                         }
 
-                        VideoInfoView(video: item, isLiked: viewModel.state.isLiked(videoId: item.id))
+                        VideoInfoView(video: .init(video: item), isLiked: viewModel.isLiked(item))
                             .padding(5)
                     }
                 })
@@ -87,7 +87,7 @@ struct VideosListView_Previews: PreviewProvider {
         VideosListView(
             viewModel: VideosListViewModel(
                 initialState: .init(loading: .loaded, videos: items),
-                environment: VideosListViewModel.Environment(searchVideos: SearchVideosClient(videosMatching: { _ in
+                environment: VideosListViewModel.Environment(searchVideos: SearchVideosUseCase(videosMatching: { _ in
                     Just(items)
                         .setFailureType(to: Error.self)
                         .eraseToAnyPublisher()
@@ -96,7 +96,7 @@ struct VideosListView_Previews: PreviewProvider {
         )
     }
 
-    static var items: [VideosListViewModel.VideoItem] = [
+    static var items: [Video] = [
         .init(id: "123", title: "Video title", imageThumbnailUrl: nil),
         .init(id: "456", title: "Video 2 title", imageThumbnailUrl: nil),
         .init(id: "6789", title: "Video 3 title", imageThumbnailUrl: nil)
@@ -104,8 +104,3 @@ struct VideosListView_Previews: PreviewProvider {
 
     static let error: Error = NSError(domain: "Preview", code: 1, userInfo: [NSLocalizedDescriptionKey: "This is preview error."])
 }
-
-extension View {
-    func eraseToAnyView() -> AnyView { AnyView(self) }
-}
-

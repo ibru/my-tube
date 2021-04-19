@@ -1,36 +1,12 @@
 //
-//  VideoDetailViewModel.swift
+//  VideoDetailViewModel+Redux.swift
 //  MyTube
 //
-//  Created by Jiri Urbasek on 4/16/21.
+//  Created by Jiri Urbasek on 4/19/21.
 //
 
 import Foundation
 import Combine
-
-final class VideoDetailViewModel: ObservableObject {
-    @Published var isLiked: Bool
-    @Published var video: VideosListViewModel.VideoItem
-
-    private var store: StoreType
-
-    init(store: StoreType) {
-        self.store = store
-        self.isLiked = store.state.isLiked
-        self.video = store.state.video
-
-        store.publisher.isLiked.assign(to: &self.$isLiked)
-        store.publisher.video.assign(to: &self.$video)
-    }
-
-    func toggleLikeVideo() {
-        if isLiked {
-            store.send(.dislikeVideo)
-        } else {
-            store.send(.likeVideo)
-        }
-    }
-}
 
 extension VideoDetailViewModel {
     typealias StoreType = Store<State, Action>
@@ -41,11 +17,11 @@ extension VideoDetailViewModel {
     }
 
     struct State {
-        let video: VideosListViewModel.VideoItem
+        let video: Video
         var isLiked: Bool
         var likeVideoError: Error?
 
-        init(video: VideosListViewModel.VideoItem, isLiked: Bool, likeVideoError: Error? = nil) {
+        init(video: Video, isLiked: Bool, likeVideoError: Error? = nil) {
             self.video = video
             self.isLiked = isLiked
             self.likeVideoError = likeVideoError
@@ -61,7 +37,7 @@ extension VideoDetailViewModel {
     }
 
     struct Environment {
-        var likeVideo: LikeVideoClient
+        var likeVideo: LikeVideoUseCase
     }
 }
 
@@ -94,16 +70,16 @@ extension VideoDetailViewModel {
 
 extension VideoDetailViewModel {
     struct Effects {
-        static func likeVideo(id: String, using client: LikeVideoClient) -> Effect<Action, Never> {
-            client.likeWithID(id)
+        static func likeVideo(id: String, using useCase: LikeVideoUseCase) -> Effect<Action, Never> {
+            useCase.likeWithID(id)
                 .map { _ in Action.videoLiked }
                 .replaceError(with: .onLikeVideoError(.couldNotLikeVideo))
                 .eraseToAnyPublisher()
                 .eraseToEffect()
         }
 
-        static func dislikeVideo(id: String, using client: LikeVideoClient) -> Effect<Action, Never> {
-            client.dislikeWithID(id)
+        static func dislikeVideo(id: String, using useCase: LikeVideoUseCase) -> Effect<Action, Never> {
+            useCase.dislikeWithID(id)
                 .map { _ in Action.videoDisliked }
                 .replaceError(with: .onLikeVideoError(.couldNotDislikeVideo))
                 .eraseToAnyPublisher()
@@ -119,7 +95,7 @@ extension VideoDetailViewModel.Environment {
 }
 
 extension VideoDetailViewModel.StoreType {
-    static func toLocalState(for selectedItem: VideosListViewModel.VideoItem, globalState: VideosListViewModel.State) -> (VideoDetailViewModel.State) {
+    static func toLocalState(for selectedItem: Video, globalState: VideosListViewModel.State) -> (VideoDetailViewModel.State) {
         .init(video: selectedItem, isLiked: globalState.isLiked(videoId: selectedItem.id))
     }
 
@@ -131,3 +107,4 @@ extension VideoDetailViewModel.StoreType {
         }
     }
 }
+

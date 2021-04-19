@@ -1,5 +1,5 @@
 //
-//  LikeVideoClient.swift
+//  LikeVideoUseCase.swift
 //  MyTube
 //
 //  Created by Jiri Urbasek on 4/16/21.
@@ -8,12 +8,12 @@
 import Foundation
 import Combine
 
-struct LikeVideoClient {
+struct LikeVideoUseCase {
     var likeWithID: (String) -> AnyPublisher<Bool, Error>
     var dislikeWithID: (String) -> AnyPublisher<Bool, Error>
 }
 
-extension LikeVideoClient {
+extension LikeVideoUseCase {
     static var live: Self {
         .init(
             likeWithID: { _ in

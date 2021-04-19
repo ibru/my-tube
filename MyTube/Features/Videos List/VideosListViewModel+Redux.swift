@@ -1,47 +1,16 @@
 //
-//  VideosListViewModel.swift
+//  VideosListViewModel+Redux.swift
 //  MyTube
 //
-//  Created by Jiri Urbasek on 1/26/21.
+//  Created by Jiri Urbasek on 4/19/21.
 //
 
 import Foundation
 import Combine
 
-final class VideosListViewModel: ObservableObject {
-    @Published var state: State // TODO: State should belong to Entities layer, not UI layer.
-
-    private var store: Store<State, Action>!
-
-    private var bag = Set<AnyCancellable>()
-
-    convenience init(
-        initialState: State = .init(),
-        reducer: ReducerType = VideosListViewModel.reducer,
-        environment: Environment = .live
-    ) {
-        self.init(store: .init(initialState: initialState, reducer: reducer, environment: environment))
-    }
-
-    init(store: StoreType) {
-        self.store = store
-        self.state = store.state
-
-        store.$state.assign(to: &self.$state)
-    }
-
-    deinit {
-        bag.removeAll()
-    }
-
-    func send(event: Action) {
-        store.send(event)
-    }
-}
-
 extension VideosListViewModel {
     typealias StoreType = Store<State, Action>
-    
+
     enum Error: Swift.Error, Equatable {
         case unknown
     }
@@ -55,11 +24,11 @@ extension VideosListViewModel {
         }
 
         var loading: LoadingState
-        var videos: [VideoItem]
-        
+        var videos: [Video]
+
         var likedVideoIDs: Set<String>
 
-        init(loading: LoadingState = .idle, videos: [VideoItem] = [], likedVideoIDs: Set<String> = []) {
+        init(loading: LoadingState = .idle, videos: [Video] = [], likedVideoIDs: Set<String> = []) {
             self.loading = loading
             self.videos = videos
             self.likedVideoIDs = likedVideoIDs
@@ -73,12 +42,12 @@ extension VideosListViewModel {
     enum Action {
         case onAppear
         case onSearch(String)
-        case onLoadVideos([VideoItem])
+        case onLoadVideos([Video])
         case onLoadVideosError(Error)
     }
 
     struct Environment {
-        var searchVideos: SearchVideosClient
+        var searchVideos: SearchVideosUseCase
     }
 }
 
@@ -87,14 +56,6 @@ extension VideosListViewModel.Environment {
         .init(
             searchVideos: .live
         )
-    }
-}
-
-extension VideosListViewModel {
-    struct VideoItem: Equatable, Identifiable {
-        let id: String
-        let title: String
-        let imageThumbnailUrl: URL?
     }
 }
 
@@ -117,8 +78,8 @@ extension VideosListViewModel {
                 // TODO: load saved videos
                 return .none
 
-            case .onLoadVideosError(_):
-                // TODO: present error to UI
+            case .onLoadVideosError(let error):
+                state.loading = .error(error)
                 return .none
             }
         }
@@ -127,8 +88,8 @@ extension VideosListViewModel {
 
 extension VideosListViewModel {
     struct Effects {
-        static func searchStringPublisher(searchText: String, using client: SearchVideosClient) -> Effect<Action, Never> {
-            client.videosMatching(searchText)
+        static func searchStringPublisher(searchText: String, using useCase: SearchVideosUseCase) -> Effect<Action, Never> {
+            useCase.videosMatching(searchText)
                 .map(Action.onLoadVideos)
                 .replaceError(with: .onLoadVideosError(.unknown))
                 .eraseToAnyPublisher()
@@ -144,22 +105,5 @@ extension VideosListViewModel.StoreType {
         environment: VideosListViewModel.Environment = .live
     ) -> Self {
         .init(initialState: initialState, reducer: reducer, environment: environment)
-    }
-}
-
-extension VideosListViewModel {
-    func viewModel(
-        forDetailOf item: VideosListViewModel.VideoItem,
-        environment: VideoDetailViewModel.Environment = .live
-    ) -> VideoDetailViewModel {
-        let detailStore: VideoDetailViewModel.StoreType =
-            store.scope(
-                toLocalState: { VideoDetailViewModel.StoreType.toLocalState(for: item, globalState: $0) },
-                updateGlobalState: VideoDetailViewModel.StoreType.update(global:from:),
-                environment: environment,
-                using: VideoDetailViewModel.reducer
-            )
-        
-        return .init(store: detailStore)
     }
 }

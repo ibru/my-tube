@@ -84,7 +84,7 @@ class VideoDetailViewModelTests: XCTestCase {
 private extension VideoDetailViewModel.Environment {
     static var noop: Self {
         return .init(
-            likeVideo: LikeVideoClient(
+            likeVideo: LikeVideoUseCase(
                 likeWithID: { _ in .empty() },
                 dislikeWithID: { _ in .empty() }
             )
@@ -94,14 +94,14 @@ private extension VideoDetailViewModel.Environment {
 
 extension VideoDetailViewModel.State {
     static func mock(
-        video: VideosListViewModel.VideoItem = .mock(),
+        video: Video = .mock(),
         isLiked: Bool = false
     ) -> Self {
         .init(video: video, isLiked: isLiked)
     }
 }
 
-extension VideosListViewModel.VideoItem {
+extension Video {
     static func mock(
         id: String = "mockId",
         title: String = "Mock video",

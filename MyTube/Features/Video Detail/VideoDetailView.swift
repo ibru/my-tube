@@ -51,7 +51,7 @@ struct VideoDetailView: View {
                 })
             }
 
-            VideoInfoView(video: viewModel.video, isLiked: viewModel.isLiked)
+            VideoInfoView(video: .init(video: viewModel.video), isLiked: viewModel.isLiked)
                 .padding()
 
 
@@ -109,7 +109,7 @@ struct VideoDetailView_Previews: PreviewProvider {
 }
 
 struct VideoInfoView: View {
-    let video: VideosListViewModel.VideoItem
+    let video: VideoItem
     let isLiked: Bool
 
     var body: some View {
@@ -128,6 +128,25 @@ struct VideoInfoView: View {
                 Text("Peppa Pig - Official channel")
                     .font(.caption)
             }
+        }
+    }
+}
+extension VideoInfoView {
+    struct VideoItem: Equatable, Identifiable {
+        let id: String
+        let title: String
+        let imageThumbnailUrl: URL?
+
+        init(video: VideosListViewModel.VideoItem) {
+            id = video.id
+            title = video.title
+            imageThumbnailUrl = video.imageThumbnailUrl
+        }
+
+        init(video: VideoDetailViewModel.VideoItem) {
+            id = video.id
+            title = video.title
+            imageThumbnailUrl = video.imageThumbnailUrl
         }
     }
 }
