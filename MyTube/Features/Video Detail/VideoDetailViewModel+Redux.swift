@@ -90,7 +90,14 @@ extension VideoDetailViewModel {
 
 extension VideoDetailViewModel.Environment {
     static var live: Self {
-        .init(likeVideo: .live)
+        .init(
+            likeVideo: .live(
+                repository: .coreData(
+                    repository: .live(
+                        managedObjectContext: PersistenceController.shared.container.viewContext)
+                )
+            )
+        )
     }
 }
 

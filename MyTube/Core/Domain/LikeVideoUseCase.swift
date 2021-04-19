@@ -13,18 +13,13 @@ struct LikeVideoUseCase {
     var dislike: (Video) -> AnyPublisher<Bool, Error>
 }
 
+struct LikeVideoRepository {
+    var like: (Video) -> AnyPublisher<Bool, Error>
+    var dislike: (Video) -> AnyPublisher<Bool, Error>
+}
+
 extension LikeVideoUseCase {
-    static var live: Self {
-        .init(
-            like: { _ in
-                Just(true)
-                    .setFailureType(to: Error.self)
-                    .eraseToAnyPublisher()
-            }, dislike: { _ in
-                Just(true)
-                    .setFailureType(to: Error.self)
-                    .eraseToAnyPublisher()
-            }
-        )
+    static func live(repository: LikeVideoRepository) -> Self {
+        .init(like: repository.like, dislike: repository.dislike)
     }
 }
