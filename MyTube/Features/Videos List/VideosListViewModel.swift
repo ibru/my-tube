@@ -27,7 +27,11 @@ final class VideosListViewModel: ObservableObject {
         self.store = store
 
         store.publisher.videos
-            .map { $0.map(VideoItem.init) }
+            .map {
+                $0.map { [unowned self] video in
+                    .init(video: video, isLiked: self.store.state.isLiked(videoId: video.id))
+                }
+            }
             .assign(to: &self.$videos)
 
         store.publisher.loading
@@ -40,14 +44,21 @@ final class VideosListViewModel: ObservableObject {
                 }
             }
             .assign(to: &self.$isLoading)
+
+        store.publisher.likedVideoIDs
+            .sink { [unowned self] IDs in
+                self.videos = self.videos
+                    .map {
+                        var updatedVideo = $0
+                        updatedVideo.isLiked = IDs.contains($0.id)
+                        return updatedVideo
+                    }
+            }
+            .store(in: &bag)
     }
 
     deinit {
         bag.removeAll()
-    }
-
-    func isLiked(_ video: VideoItem) -> Bool {
-        store.state.isLiked(videoId: video.id)
     }
 
     func viewAppeared() {
@@ -64,11 +75,18 @@ extension VideosListViewModel {
         var id: String { video.id }
         var title: String { video.title }
         var imageThumbnailUrl: URL? { video.imageThumbnailUrl }
+        var isLiked: Bool
 
         fileprivate let video: Video
 
         init(video: Video) {
             self.video = video
+            isLiked = false
+        }
+
+        init(video: Video, isLiked: Bool) {
+            self.init(video: video)
+            self.isLiked = isLiked
         }
     }
 }

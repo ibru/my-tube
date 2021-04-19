@@ -155,6 +155,41 @@ class VideosListViewModelTests: XCTestCase {
         XCTAssertEqual(items, expectedItems)
     }
 
+    func testVideosShouldTellWhichVideoIsLiked() {
+        let state: VideosListViewModel.State = .init(
+            loading:.loaded,
+            videos: [.mock(id: "id1"), .mock(id: "id2"), .mock(id: "id3")],
+            likedVideoIDs: ["id2"]
+        )
+        let viewModel = VideosListViewModel(initialState: state, environment: .dummy)
+
+        let likes = viewModel.videos.reduce(into: [:]) { $0[$1.id] = $1.isLiked }
+        XCTAssertEqual(likes, ["id1": false, "id2": true, "id3": false])
+    }
+
+    func testVideosUpdateLikeStateWhenStateLikedVideoIDsChange() {
+        let state: VideosListViewModel.State = .init(
+            loading:.loaded,
+            videos: [.mock(id: "id1"), .mock(id: "id2"), .mock(id: "id3")],
+            likedVideoIDs: ["id2"]
+        )
+        let store = VideosListViewModel.StoreType(
+            initialState: state,
+            reducer: VideosListViewModel.reducer,
+            environment: .dummy
+        )
+
+        let viewModel = VideosListViewModel(store: store)
+
+        store.state.likedVideoIDs.removeAll()
+        XCTAssertTrue(viewModel.videos.allSatisfy { $0.isLiked == false })
+
+        store.state.likedVideoIDs.insert("id1")
+
+        let likes = viewModel.videos.reduce(into: [:]) { $0[$1.id] = $1.isLiked }
+        XCTAssertEqual(likes, ["id1": true, "id2": false, "id3": false])
+    }
+
     func testReduceShouldChangeStateFromIdleToLoadingWhenItReceivesOnSearchEvent() {
         let searchString = "search"
         var state: VideosListViewModel.State = .init(loading:.idle, videos: [])
