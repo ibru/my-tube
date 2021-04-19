@@ -48,10 +48,10 @@ extension VideoDetailViewModel {
         .init { state, action, environment in
             switch action {
             case .likeVideo:
-                return Effects.likeVideo(id: state.video.id, using: environment.likeVideo)
+                return Effects.like(video: state.video, using: environment.likeVideo)
 
             case .dislikeVideo:
-                return Effects.dislikeVideo(id: state.video.id, using: environment.likeVideo)
+                return Effects.dislike(video: state.video, using: environment.likeVideo)
 
             case .onLikeVideoError(_):
                 return .none
@@ -70,16 +70,16 @@ extension VideoDetailViewModel {
 
 extension VideoDetailViewModel {
     struct Effects {
-        static func likeVideo(id: String, using useCase: LikeVideoUseCase) -> Effect<Action, Never> {
-            useCase.likeWithID(id)
+        static func like(video: Video, using useCase: LikeVideoUseCase) -> Effect<Action, Never> {
+            useCase.like(video)
                 .map { _ in Action.videoLiked }
                 .replaceError(with: .onLikeVideoError(.couldNotLikeVideo))
                 .eraseToAnyPublisher()
                 .eraseToEffect()
         }
 
-        static func dislikeVideo(id: String, using useCase: LikeVideoUseCase) -> Effect<Action, Never> {
-            useCase.dislikeWithID(id)
+        static func dislike(video: Video, using useCase: LikeVideoUseCase) -> Effect<Action, Never> {
+            useCase.dislike(video)
                 .map { _ in Action.videoDisliked }
                 .replaceError(with: .onLikeVideoError(.couldNotDislikeVideo))
                 .eraseToAnyPublisher()

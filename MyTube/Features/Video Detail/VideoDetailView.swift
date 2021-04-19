@@ -90,11 +90,11 @@ struct VideoDetailView_Previews: PreviewProvider {
                         reducer: .empty,
                         environment: VideoDetailViewModel.Environment(
                             likeVideo: .init(
-                                likeWithID: { _ in
+                                like: { _ in
                                     Just(true)
                                         .setFailureType(to: Error.self)
                                         .eraseToAnyPublisher()
-                                }, dislikeWithID: { _ in
+                                }, dislike: { _ in
                                     Just(true)
                                         .setFailureType(to: Error.self)
                                         .eraseToAnyPublisher()

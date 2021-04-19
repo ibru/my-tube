@@ -41,12 +41,12 @@ class VideoDetailViewModelTests: XCTestCase {
         let exp = expectation(description: "Like video called")
 
         var environment: VideoDetailViewModel.Environment = .noop
-        environment.likeVideo.likeWithID = { id in
-            XCTAssertEqual(id, "id1")
+        environment.likeVideo.like = {
+            XCTAssertEqual($0.id, "id1")
             exp.fulfill()
             return .just(true)
         }
-        environment.likeVideo.dislikeWithID = { _ in
+        environment.likeVideo.dislike = { _ in
             XCTFail("Should not dislike video")
             return .just(true)
         }
@@ -63,12 +63,12 @@ class VideoDetailViewModelTests: XCTestCase {
         let exp = expectation(description: "Dislike video called")
 
         var environment: VideoDetailViewModel.Environment = .noop
-        environment.likeVideo.likeWithID = { _ in
+        environment.likeVideo.like = { _ in
             XCTFail("Should not like video")
             return .just(true)
         }
-        environment.likeVideo.dislikeWithID = { id in
-            XCTAssertEqual(id, "id1")
+        environment.likeVideo.dislike = {
+            XCTAssertEqual($0.id, "id1")
             exp.fulfill()
             return .just(true)
         }
@@ -85,8 +85,8 @@ private extension VideoDetailViewModel.Environment {
     static var noop: Self {
         return .init(
             likeVideo: LikeVideoUseCase(
-                likeWithID: { _ in .empty() },
-                dislikeWithID: { _ in .empty() }
+                like: { _ in .empty() },
+                dislike: { _ in .empty() }
             )
         )
     }

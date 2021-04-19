@@ -9,18 +9,18 @@ import Foundation
 import Combine
 
 struct LikeVideoUseCase {
-    var likeWithID: (String) -> AnyPublisher<Bool, Error>
-    var dislikeWithID: (String) -> AnyPublisher<Bool, Error>
+    var like: (Video) -> AnyPublisher<Bool, Error>
+    var dislike: (Video) -> AnyPublisher<Bool, Error>
 }
 
 extension LikeVideoUseCase {
     static var live: Self {
         .init(
-            likeWithID: { _ in
+            like: { _ in
                 Just(true)
                     .setFailureType(to: Error.self)
                     .eraseToAnyPublisher()
-            }, dislikeWithID: { _ in
+            }, dislike: { _ in
                 Just(true)
                     .setFailureType(to: Error.self)
                     .eraseToAnyPublisher()
