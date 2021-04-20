@@ -19,7 +19,7 @@ class LikeVideoUseCaseCoreDataTests: XCTestCase {
             },
             deleteVideo: {_ in
                 XCTFail("Should not call delete video")
-            }
+            }, savedVideos: { [] }
         )
 
         let likeRepository = LikeVideoRepository.coreData(repository: repository)
