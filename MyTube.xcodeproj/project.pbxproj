@@ -84,8 +84,6 @@
 		4987830525BE14600079701A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4987830A25BE14600079701A /* MyTubeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyTubeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4987831025BE14600079701A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4987831925BE14600079701A /* MyTubeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTubeUITests.swift; sourceTree = "<group>"; };
-		4987831B25BE14600079701A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4987832D25BE14D10079701A /* VideosListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosListView.swift; sourceTree = "<group>"; };
 		4987833625BE93B10079701A /* VideoDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDetailView.swift; sourceTree = "<group>"; };
 		49B3F831262DB117005037DB /* LikeVideoUseCase+CoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LikeVideoUseCase+CoreDataTests.swift"; sourceTree = "<group>"; };
@@ -230,7 +228,6 @@
 				498782F625BE145D0079701A /* MyTube */,
 				49495DF625C92E9400B5B616 /* Frameworks */,
 				4987830D25BE14600079701A /* MyTubeTests */,
-				4987831825BE14600079701A /* MyTubeUITests */,
 				498782F525BE145D0079701A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -278,15 +275,6 @@
 				4987831025BE14600079701A /* Info.plist */,
 			);
 			path = MyTubeTests;
-			sourceTree = "<group>";
-		};
-		4987831825BE14600079701A /* MyTubeUITests */ = {
-			isa = PBXGroup;
-			children = (
-				4987831925BE14600079701A /* MyTubeUITests.swift */,
-				4987831B25BE14600079701A /* Info.plist */,
-			);
-			path = MyTubeUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
