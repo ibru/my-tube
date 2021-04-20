@@ -10,7 +10,7 @@ import Combine
 
 final class YoutubeVideosRepository {
     func videos(for searchString: String) -> AnyPublisher<[YoutubeVideo], URLError> {
-        let urlString = "https://www.googleapis.com/youtube/v3/search/?part=snippet&maxResults=25&q=\(searchString)&key=AIzaSyBchCW1-_BCrz7AUzl8Bkv5WhkDHx6RMes"
+        let urlString = "https://www.googleapis.com/youtube/v3/search/?part=snippet&maxResults=25&q=\(searchString)&key=<put your YouTube Data API Key here>"
         let url = URL(string: urlString)!
 
         return URLSession.shared.dataTaskPublisher(for: url)
