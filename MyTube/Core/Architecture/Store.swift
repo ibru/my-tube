@@ -190,6 +190,15 @@ public final class Store<State, Action> {
     return localStore
   }
 
+    /// Scopes the store to one that exposes local state and actions.
+    /// This can be useful for deriving new stores to hand to child views in an application.
+    ///
+    /// - Parameters:
+    ///   - toLocalState: A function that transforms `State` into `LocalState`.
+    ///   - updateGlobalState: A function that modifies `GlobalState` based on changes happening inside `LocalState`
+    ///   - environment: Environment needed for `LocalState`
+    ///   - reducer: A Reducer operating on `LocalState`, `LocalAction` and `LocalEnvironment`
+    /// - Returns: A new store with its domain (state and action) transformed.
     public func scope<LocalState, LocalAction, LocalEnvironment>(
         toLocalState: @escaping (State) -> (LocalState),
         updateGlobalState: @escaping (inout State, LocalState) -> Void,
