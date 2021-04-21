@@ -190,37 +190,6 @@ public final class Store<State, Action> {
     return localStore
   }
 
-    /// Scopes the store to one that exposes local state and actions.
-    /// This can be useful for deriving new stores to hand to child views in an application.
-    ///
-    /// - Parameters:
-    ///   - toLocalState: A function that transforms `State` into `LocalState`.
-    ///   - updateGlobalState: A function that modifies `GlobalState` based on changes happening inside `LocalState`
-    ///   - environment: Environment needed for `LocalState`
-    ///   - reducer: A Reducer operating on `LocalState`, `LocalAction` and `LocalEnvironment`
-    /// - Returns: A new store with its domain (state and action) transformed.
-    public func scope<LocalState, LocalAction, LocalEnvironment>(
-        toLocalState: @escaping (State) -> (LocalState),
-        updateGlobalState: @escaping (inout State, LocalState) -> Void,
-        environment: @autoclosure @escaping () -> LocalEnvironment,
-        using reducer: Reducer<LocalState, LocalAction, LocalEnvironment>
-    ) -> Store<LocalState, LocalAction> {
-        let localStore = Store<LocalState, LocalAction>(
-            initialState: toLocalState(self.state),
-            reducer: {
-                let effect = reducer.run(&$0, $1, environment())
-                updateGlobalState(&self.state, $0)
-                return effect
-            }
-        )
-        localStore.parentCancellable = self.$state
-            .sink { [weak localStore] newValue in
-                localStore?.state = toLocalState(newValue)
-            }
-
-        return localStore
-    }
-
   /// Scopes the store to one that exposes local state.
   ///
   /// - Parameter toLocalState: A function that transforms `State` into `LocalState`.
@@ -373,3 +342,36 @@ public struct StorePublisher<State>: Publisher {
   }
 }
 
+extension Store {
+    /// Scopes the store to one that exposes local state and actions.
+    ///
+    /// This can be useful for deriving new stores to hand to child views in an application.
+    ///
+    /// - Parameters:
+    ///   - toLocalState: A function that transforms `State` into `LocalState`.
+    ///   - updateGlobalState: A function that modifies `State` based on changes happening inside `LocalState`
+    ///   - environment: Environment needed for `LocalState`
+    ///   - reducer: A Reducer operating on `LocalState`, `LocalAction` and `LocalEnvironment`
+    /// - Returns: A new store with its domain (state and action) transformed.
+    public func scope<LocalState, LocalAction, LocalEnvironment>(
+        toLocalState: @escaping (State) -> (LocalState),
+        updateGlobalState: @escaping (inout State, LocalState) -> Void,
+        environment: @autoclosure @escaping () -> LocalEnvironment,
+        using reducer: Reducer<LocalState, LocalAction, LocalEnvironment>
+    ) -> Store<LocalState, LocalAction> {
+        let localStore = Store<LocalState, LocalAction>(
+            initialState: toLocalState(self.state),
+            reducer: {
+                let effect = reducer.run(&$0, $1, environment())
+                updateGlobalState(&self.state, $0)
+                return effect
+            }
+        )
+        localStore.parentCancellable = self.$state
+            .sink { [weak localStore] newValue in
+                localStore?.state = toLocalState(newValue)
+            }
+
+        return localStore
+    }
+}
