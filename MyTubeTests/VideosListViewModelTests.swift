@@ -22,11 +22,8 @@ class VideosListViewModelTests: XCTestCase {
     }
 
     func testSearchForShouldPassSearchedStringToSearchVideosUseCase() throws {
-        var actualSearchString = ""
-        let environment = VideosListViewModel.Environment(searchVideos: SearchVideosUseCase(videosMatching: {
-            actualSearchString = $0
-            return .just([])
-        }))
+        let searchVideosUseCase = SearchVideosUseCaseSpy()
+        let environment = VideosListViewModel.Environment(searchVideos: searchVideosUseCase)
 
         let viewModel = VideosListViewModel(environment: environment)
         let expectedSearchString = "search"
@@ -39,7 +36,7 @@ class VideosListViewModelTests: XCTestCase {
 
         _ = try wait(for: recorder, timeout: 0.20)
 
-        XCTAssertEqual(actualSearchString, expectedSearchString)
+        XCTAssertEqual(searchVideosUseCase.givenSearchString, expectedSearchString)
     }
 
     func testSearchVideosShouldLoadVideosUsingSearchVideosUseCase() throws {
@@ -47,7 +44,11 @@ class VideosListViewModelTests: XCTestCase {
             .init(id: "id1", title: "Video 1", imageThumbnailUrl: nil),
             .init(id: "id2", title: "Video 2", imageThumbnailUrl: URL(string: "http://example.com"))
         ]
-        let viewModel = VideosListViewModel(environment: .mock(with: videos))
+        let searchVideosUseCase = SearchVideosUseCaseStub()
+        var environment = VideosListViewModel.Environment.dummy
+        environment.searchVideos = searchVideosUseCase
+
+        let viewModel = VideosListViewModel(environment: environment)
 
         let recorder = viewModel.$videos
             .dropFirst()
@@ -55,6 +56,7 @@ class VideosListViewModelTests: XCTestCase {
             .next()
 
         viewModel.searchVideos(for: "search")
+        searchVideosUseCase.loadedVideosSubject.send(videos)
 
         let items = try wait(for: recorder, timeout: 0.20)
         let expectedItems = videos.map(VideosListViewModel.VideoItem.init)
@@ -63,9 +65,8 @@ class VideosListViewModelTests: XCTestCase {
     }
 
     func testSearchVideosShouldChangeIsLoadingToTrueWhenVideosMatchingUseCaseIsNotCompletedYet() {
-        let loadedVideosSubject = PassthroughSubject<[Video], Error>()
         var environment = VideosListViewModel.Environment.dummy
-        environment.searchVideos = .init(videosMatching: { _ in loadedVideosSubject.eraseToAnyPublisher() })
+        environment.searchVideos = SearchVideosUseCaseStub()
 
         let viewModel = VideosListViewModel(reducer: VideosListViewModel.reducer, environment: environment)
 
@@ -74,37 +75,36 @@ class VideosListViewModelTests: XCTestCase {
     }
 
     func testSearchVideosShouldChangeIsLoadingToFalseWhenVideosMatchingUseCaseProducesAnyOutput() {
-        let loadedVideosSubject = PassthroughSubject<[Video], Error>()
+        let searchVideosUseCase = SearchVideosUseCaseStub()
         var environment = VideosListViewModel.Environment.dummy
-        environment.searchVideos = .init(videosMatching: { _ in loadedVideosSubject.eraseToAnyPublisher() })
+        environment.searchVideos = searchVideosUseCase
 
         let viewModel = VideosListViewModel(environment: environment)
 
         viewModel.searchVideos(for: "search")
-        loadedVideosSubject.send([])
+        searchVideosUseCase.loadedVideosSubject.send([])
 
         XCTAssertFalse(viewModel.isLoading)
     }
 
     func testSearchVideosShouldChangeIsLoadingToFalseWhenVideosMatchingUseCaseCompletesWithError() {
-        let loadedVideosSubject = PassthroughSubject<[Video], Error>()
         let error: Error = NSError()
-
+        let searchVideosUseCase = SearchVideosUseCaseStub()
         var environment = VideosListViewModel.Environment.dummy
-        environment.searchVideos = .init(videosMatching: { _ in loadedVideosSubject.eraseToAnyPublisher() })
+        environment.searchVideos = searchVideosUseCase
 
         let viewModel = VideosListViewModel(environment: environment)
 
         viewModel.searchVideos(for: "search")
-        loadedVideosSubject.send(completion: .failure(error))
+        searchVideosUseCase.loadedVideosSubject.send(completion: .failure(error))
 
         XCTAssertFalse(viewModel.isLoading)
     }
 
     func testSearchVideosShouldSetIsLoadingToTrueWhenVideosMatchingUseCaseIsLoadingVideos() {
-        let loadedVideosSubject = PassthroughSubject<[Video], Error>()
+        let searchVideosUseCase = SearchVideosUseCaseStub()
         var environment = VideosListViewModel.Environment.noop
-        environment.searchVideos = .init(videosMatching: { _ in loadedVideosSubject.eraseToAnyPublisher() })
+        environment.searchVideos = searchVideosUseCase
 
         let viewModel = VideosListViewModel(environment: environment)
 
@@ -114,9 +114,9 @@ class VideosListViewModelTests: XCTestCase {
     }
     
     func testSearchVideosShouldReplaceResultsFromPreviousSearch() throws {
-        var loadedVideosSubject = PassthroughSubject<[Video], Error>()
+        let searchVideosUseCase = SearchVideosUseCaseStub()
         var environment = VideosListViewModel.Environment.noop
-        environment.searchVideos = .init(videosMatching: { _ in loadedVideosSubject.eraseToAnyPublisher() })
+        environment.searchVideos = searchVideosUseCase
 
         let videos1: [Video] = [
             .init(id: "id1", title: "Video 1", imageThumbnailUrl: nil),
@@ -135,14 +135,14 @@ class VideosListViewModelTests: XCTestCase {
             .next(2)
 
         viewModel.searchVideos(for: "search1")
-        loadedVideosSubject.send(videos1)
-        loadedVideosSubject.send(completion: .finished)
+        searchVideosUseCase.loadedVideosSubject.send(videos1)
+        searchVideosUseCase.loadedVideosSubject.send(completion: .finished)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            loadedVideosSubject = PassthroughSubject<[Video], Error>()
+            searchVideosUseCase.loadedVideosSubject = PassthroughSubject<[Video], Error>()
             viewModel.searchVideos(for: "search2")
-            loadedVideosSubject.send(videos2)
-            loadedVideosSubject.send(completion: .finished)
+            searchVideosUseCase.loadedVideosSubject.send(videos2)
+            searchVideosUseCase.loadedVideosSubject.send(completion: .finished)
         }
 
         let items = try wait(for: recorder, timeout: 0.20)
@@ -203,18 +203,34 @@ class VideosListViewModelTests: XCTestCase {
 
 private extension VideosListViewModel.Environment {
     static var dummy: Self {
-        return .mock(with: [])
+        return .init(searchVideos: SearchVideosUseCaseStub())
     }
 
     static var noop: Self {
-        return .mock(with: [])
+        return .dummy
+    }
+}
+
+class SearchVideosUseCaseStub: SearchVideosUseCaseType {
+    var loadedVideosSubject = PassthroughSubject<[Video], Error>()
+
+    init(loadedVideosSubject: PassthroughSubject<[Video], Error> = .init()) {
+        self.loadedVideosSubject = loadedVideosSubject
     }
 
-    static func mock(with videos: [Video]) -> Self {
-        .init(
-            searchVideos: SearchVideosUseCase(
-                videosMatching: { _ in .just(videos) }
-            )
-        )
+    func videos(matching searchString: String) -> AnyPublisher<[Video], Error> {
+        loadedVideosSubject.eraseToAnyPublisher()
+    }
+}
+
+class SearchVideosUseCaseSpy: SearchVideosUseCaseStub {
+    var didCallVideosMatching = false
+    var givenSearchString: String?
+
+    override func videos(matching searchString: String) -> AnyPublisher<[Video], Error> {
+        didCallVideosMatching = true
+        givenSearchString = searchString
+
+        return super.videos(matching: searchString)
     }
 }

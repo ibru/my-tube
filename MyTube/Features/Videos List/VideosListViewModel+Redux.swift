@@ -47,14 +47,14 @@ extension VideosListViewModel {
     }
 
     struct Environment {
-        var searchVideos: SearchVideosUseCase
+        var searchVideos: SearchVideosUseCaseType
     }
 }
 
 extension VideosListViewModel.Environment {
     static var live: Self {
         .init(
-            searchVideos: .live
+            searchVideos: SearchVideosUseCase()
         )
     }
 }
@@ -88,8 +88,8 @@ extension VideosListViewModel {
 
 extension VideosListViewModel {
     struct Effects {
-        static func searchStringPublisher(searchText: String, using useCase: SearchVideosUseCase) -> Effect<Action, Never> {
-            useCase.videosMatching(searchText)
+        static func searchStringPublisher(searchText: String, using useCase: SearchVideosUseCaseType) -> Effect<Action, Never> {
+            useCase.videos(matching: searchText)
                 .map(Action.onLoadVideos)
                 .replaceError(with: .onLoadVideosError(.unknown))
                 .eraseToAnyPublisher()

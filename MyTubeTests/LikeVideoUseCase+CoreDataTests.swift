@@ -12,23 +12,33 @@ import CombineExpectations
 class LikeVideoUseCaseCoreDataTests: XCTestCase {
 
     func testLikeShouldCallSaveMethod() throws {
-        let exp = expectation(description: "Save method called")
-        let repository = CoreDataVideoPersistenceRepository(
-            saveVideo: { video in
-                exp.fulfill()
-            },
-            deleteVideo: {_ in
-                XCTFail("Should not call delete video")
-            }, savedVideos: { [] }
-        )
+        let persistenceRepository = CoreDataVideoPersistenceRepositorySpy()
+        let repository = CoreDataLikeVideoRepository(repository: persistenceRepository)
 
-        let likeRepository = LikeVideoRepository.coreData(repository: repository)
-
-        let recorder = likeRepository.like(.mock())
+        let recorder = repository.like(.mock())
             .record()
             .next()
 
         _ = try wait(for: recorder, timeout: 0.1)
-        waitForExpectations(timeout: 0.15)
+
+        XCTAssertTrue(persistenceRepository.saveVideoCalled)
+        XCTAssertFalse(persistenceRepository.deleteVideoCalled)
+    }
+}
+
+class CoreDataVideoPersistenceRepositorySpy: CoreDataVideoPersistenceRepositoryType {
+    var saveVideoCalled = false
+    var deleteVideoCalled = false
+
+    func saveVideo(_ video: Video) throws {
+        saveVideoCalled = true
+    }
+
+    func deleteVideo(_ video: Video) throws {
+        deleteVideoCalled = true
+    }
+
+    func savedVideos() throws -> [Video] {
+        []
     }
 }

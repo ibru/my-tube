@@ -87,11 +87,7 @@ struct VideosListView_Previews: PreviewProvider {
         VideosListView(
             viewModel: VideosListViewModel(
                 initialState: .init(loading: .loaded, videos: items),
-                environment: VideosListViewModel.Environment(searchVideos: SearchVideosUseCase(videosMatching: { _ in
-                    Just(items)
-                        .setFailureType(to: Error.self)
-                        .eraseToAnyPublisher()
-                }))
+                environment: VideosListViewModel.Environment(searchVideos: SearchVideosUseCaseMock(items: items))
             )
         )
     }
@@ -103,4 +99,14 @@ struct VideosListView_Previews: PreviewProvider {
     ]
 
     static let error: Error = NSError(domain: "Preview", code: 1, userInfo: [NSLocalizedDescriptionKey: "This is preview error."])
+}
+
+struct SearchVideosUseCaseMock: SearchVideosUseCaseType {
+    var items: [Video]
+
+    func videos(matching searchString: String) -> AnyPublisher<[Video], Error> {
+        Just(items)
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
+    }
 }

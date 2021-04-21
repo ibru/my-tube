@@ -8,35 +8,40 @@
 import Foundation
 import Combine
 
-extension LikeVideoRepository {
-    static func coreData(repository: CoreDataVideoPersistenceRepository) -> Self {
-        .init(
-            like: { video in
-                Deferred {
-                    Future { promise in
-                        do {
-                            try repository.saveVideo(video)
-                            promise(.success(true))
-                        } catch {
-                            promise(.failure(error))
-                        }
-                    }
+struct CoreDataLikeVideoRepository {
+    private var repository: CoreDataVideoPersistenceRepositoryType
+
+    init(repository: CoreDataVideoPersistenceRepositoryType) {
+        self.repository = repository
+    }
+}
+
+extension CoreDataLikeVideoRepository: LikeVideoRepositoryType {
+    func like(_ video: Video) -> AnyPublisher<Bool, Error> {
+        Deferred {
+            Future { promise in
+                do {
+                    try repository.saveVideo(video)
+                    promise(.success(true))
+                } catch {
+                    promise(.failure(error))
                 }
-                .eraseToAnyPublisher()
-            },
-            dislike: { video in
-                Deferred {
-                    Future { promise in
-                        do {
-                            try repository.deleteVideo(video)
-                            promise(.success(true))
-                        } catch {
-                            promise(.failure(error))
-                        }
-                    }
-                }
-                .eraseToAnyPublisher()
             }
-        )
+        }
+        .eraseToAnyPublisher()
+    }
+
+    func dislike(_ video: Video) -> AnyPublisher<Bool, Error> {
+        Deferred {
+            Future { promise in
+                do {
+                    try repository.deleteVideo(video)
+                    promise(.success(true))
+                } catch {
+                    promise(.failure(error))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
     }
 }

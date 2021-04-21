@@ -89,22 +89,25 @@ struct VideoDetailView_Previews: PreviewProvider {
                         ),
                         reducer: .empty,
                         environment: VideoDetailViewModel.Environment(
-                            likeVideo: .init(
-                                like: { _ in
-                                    Just(true)
-                                        .setFailureType(to: Error.self)
-                                        .eraseToAnyPublisher()
-                                }, dislike: { _ in
-                                    Just(true)
-                                        .setFailureType(to: Error.self)
-                                        .eraseToAnyPublisher()
-                                }
-                            )
+                            likeVideo: LikeVideoUseCaseMock()
                         )
                     )
                 )
             )
         }
+    }
+}
+
+struct LikeVideoUseCaseMock: LikeVideoUseCaseType {
+    func like(_ video: Video) -> AnyPublisher<Bool, Error> {
+        Just(true)
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
+    }
+    func dislike(_ video: Video) -> AnyPublisher<Bool, Error> {
+        Just(true)
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
     }
 }
 

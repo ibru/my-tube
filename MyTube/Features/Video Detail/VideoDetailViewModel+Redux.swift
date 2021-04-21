@@ -37,7 +37,7 @@ extension VideoDetailViewModel {
     }
 
     struct Environment {
-        var likeVideo: LikeVideoUseCase
+        var likeVideo: LikeVideoUseCaseType
     }
 }
 
@@ -70,7 +70,7 @@ extension VideoDetailViewModel {
 
 extension VideoDetailViewModel {
     struct Effects {
-        static func like(video: Video, using useCase: LikeVideoUseCase) -> Effect<Action, Never> {
+        static func like(video: Video, using useCase: LikeVideoUseCaseType) -> Effect<Action, Never> {
             useCase.like(video)
                 .map { _ in Action.videoLiked }
                 .replaceError(with: .onLikeVideoError(.couldNotLikeVideo))
@@ -78,7 +78,7 @@ extension VideoDetailViewModel {
                 .eraseToEffect()
         }
 
-        static func dislike(video: Video, using useCase: LikeVideoUseCase) -> Effect<Action, Never> {
+        static func dislike(video: Video, using useCase: LikeVideoUseCaseType) -> Effect<Action, Never> {
             useCase.dislike(video)
                 .map { _ in Action.videoDisliked }
                 .replaceError(with: .onLikeVideoError(.couldNotDislikeVideo))
@@ -91,9 +91,9 @@ extension VideoDetailViewModel {
 extension VideoDetailViewModel.Environment {
     static var live: Self {
         .init(
-            likeVideo: .live(
-                repository: .coreData(
-                    repository: .live(
+            likeVideo: LikeVideoUseCase(
+                repository: CoreDataLikeVideoRepository(
+                    repository: CoreDataVideoPersistenceRepository(
                         managedObjectContext: PersistenceController.shared.container.viewContext)
                 )
             )

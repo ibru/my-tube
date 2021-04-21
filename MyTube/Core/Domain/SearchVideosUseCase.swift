@@ -8,23 +8,21 @@
 import Foundation
 import Combine
 
-struct SearchVideosUseCase {
-    var videosMatching: (String) -> AnyPublisher<[Video], Error>
+protocol SearchVideosUseCaseType {
+    func videos(matching searchString: String) -> AnyPublisher<[Video], Error>
 }
 
-extension SearchVideosUseCase {
-    static var live: Self {
-        .init(
-            videosMatching: {
-                YoutubeVideosRepository().videos(for: $0)
-                    .map {
-                        $0.map {
-                            .init(id: $0.id, title: $0.title, imageThumbnailUrl: $0.imageThumbnailUrl)
-                        }
-                    }
-                    .mapError { $0 as Error }
-                    .eraseToAnyPublisher()
+struct SearchVideosUseCase {}
+
+extension SearchVideosUseCase: SearchVideosUseCaseType {
+    func videos(matching searchString: String) -> AnyPublisher<[Video], Error> {
+        YoutubeVideosRepository().videos(for: searchString)
+            .map {
+                $0.map {
+                    .init(id: $0.id, title: $0.title, imageThumbnailUrl: $0.imageThumbnailUrl)
+                }
             }
-        )
+            .mapError { $0 as Error }
+            .eraseToAnyPublisher()
     }
 }

@@ -38,56 +38,41 @@ class VideoDetailViewModelTests: XCTestCase {
 
     func testToggleLikeVideoShouldLikeVideoWhenVideoIsNotLiked() {
         let state: VideoDetailViewModel.State = .mock(video: .mock(id: "id1"), isLiked: false)
-        let exp = expectation(description: "Like video called")
 
+        let likeVideoUseCase = LikeVideoUseCaseSpy(likePublisher: .just(true), dislikePublisher: .just(true))
         var environment: VideoDetailViewModel.Environment = .noop
-        environment.likeVideo.like = {
-            XCTAssertEqual($0.id, "id1")
-            exp.fulfill()
-            return .just(true)
-        }
-        environment.likeVideo.dislike = { _ in
-            XCTFail("Should not dislike video")
-            return .just(true)
-        }
+        environment.likeVideo = likeVideoUseCase
 
         let viewModel = makeViewModel(initialState: state, environment: environment)
 
         viewModel.toggleLikeVideo()
 
-        waitForExpectations(timeout: 0.1)
+        XCTAssertTrue(likeVideoUseCase.likeVideoCalled)
+        XCTAssertEqual(likeVideoUseCase.givenVideo?.id, "id1")
+        XCTAssertFalse(likeVideoUseCase.dislikeVideoCalled)
     }
 
     func testToggleLikeVideoShouldDislikeVideoWhenVideoIsLiked() {
         let state: VideoDetailViewModel.State = .mock(video: .mock(id: "id1"), isLiked: true)
-        let exp = expectation(description: "Dislike video called")
 
+        let likeVideoUseCase = LikeVideoUseCaseSpy(likePublisher: .just(true), dislikePublisher: .just(true))
         var environment: VideoDetailViewModel.Environment = .noop
-        environment.likeVideo.like = { _ in
-            XCTFail("Should not like video")
-            return .just(true)
-        }
-        environment.likeVideo.dislike = {
-            XCTAssertEqual($0.id, "id1")
-            exp.fulfill()
-            return .just(true)
-        }
+        environment.likeVideo = likeVideoUseCase
 
         let viewModel = makeViewModel(initialState: state, environment: environment)
 
         viewModel.toggleLikeVideo()
 
-        waitForExpectations(timeout: 0.1)
+        XCTAssertFalse(likeVideoUseCase.likeVideoCalled)
+        XCTAssertTrue(likeVideoUseCase.dislikeVideoCalled)
+        XCTAssertEqual(likeVideoUseCase.givenVideo?.id, "id1")
     }
 }
 
 private extension VideoDetailViewModel.Environment {
     static var noop: Self {
         return .init(
-            likeVideo: LikeVideoUseCase(
-                like: { _ in .empty() },
-                dislike: { _ in .empty() }
-            )
+            likeVideo: LikeVideoUseCaseStub(likePublisher: .empty(), dislikePublisher: .empty())
         )
     }
 }
@@ -108,5 +93,41 @@ extension Video {
         imageThumbnailUrl: URL? = nil
     ) -> Self {
         .init(id: id, title: title, imageThumbnailUrl: imageThumbnailUrl)
+    }
+}
+
+class LikeVideoUseCaseStub: LikeVideoUseCaseType {
+    var likePublisher: AnyPublisher<Bool, Error>
+    var dislikePublisher: AnyPublisher<Bool, Error>
+
+    init(likePublisher: AnyPublisher<Bool, Error>, dislikePublisher: AnyPublisher<Bool, Error>) {
+        self.likePublisher = likePublisher
+        self.dislikePublisher = dislikePublisher
+    }
+
+    func like(_ video: Video) -> AnyPublisher<Bool, Error> {
+        likePublisher
+    }
+
+    func dislike(_ video: Video) -> AnyPublisher<Bool, Error> {
+        dislikePublisher
+    }
+}
+
+class LikeVideoUseCaseSpy: LikeVideoUseCaseStub {
+    var likeVideoCalled = false
+    var dislikeVideoCalled = false
+    var givenVideo: Video?
+
+    override func like(_ video: Video) -> AnyPublisher<Bool, Error> {
+        likeVideoCalled = true
+        givenVideo = video
+        return super.like(video)
+    }
+
+    override func dislike(_ video: Video) -> AnyPublisher<Bool, Error> {
+        dislikeVideoCalled = true
+        givenVideo = video
+        return super.dislike(video)
     }
 }

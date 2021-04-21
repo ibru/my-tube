@@ -8,18 +8,30 @@
 import Foundation
 import Combine
 
+protocol LikeVideoUseCaseType {
+    func like(_ video: Video) -> AnyPublisher<Bool, Error>
+    func dislike(_ video: Video) -> AnyPublisher<Bool, Error>
+}
+
+protocol LikeVideoRepositoryType {
+    func like(_ video: Video) -> AnyPublisher<Bool, Error>
+    func dislike(_ video: Video) -> AnyPublisher<Bool, Error>
+}
+
 struct LikeVideoUseCase {
-    var like: (Video) -> AnyPublisher<Bool, Error>
-    var dislike: (Video) -> AnyPublisher<Bool, Error>
+    private var likeVideoRepository: LikeVideoRepositoryType
+
+    init(repository: LikeVideoRepositoryType) {
+        self.likeVideoRepository = repository
+    }
 }
 
-struct LikeVideoRepository {
-    var like: (Video) -> AnyPublisher<Bool, Error>
-    var dislike: (Video) -> AnyPublisher<Bool, Error>
-}
+extension LikeVideoUseCase: LikeVideoUseCaseType {
+    func like(_ video: Video) -> AnyPublisher<Bool, Error> {
+        likeVideoRepository.like(video)
+    }
 
-extension LikeVideoUseCase {
-    static func live(repository: LikeVideoRepository) -> Self {
-        .init(like: repository.like, dislike: repository.dislike)
+    func dislike(_ video: Video) -> AnyPublisher<Bool, Error> {
+        likeVideoRepository.dislike(video)
     }
 }
