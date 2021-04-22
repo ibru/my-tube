@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct VideoDetailView: View {
-    //var video: VideosListViewModel.VideoItem
     @ObservedObject var viewModel: VideoDetailViewModel
 
     var body: some View {
