@@ -17,7 +17,7 @@ class LikeVideoUseCaseCoreDataTests: XCTestCase {
             saveVideo: { video in
                 exp.fulfill()
             },
-            deleteVideo: {_ in
+            deleteVideo: { _ in
                 XCTFail("Should not call delete video")
             }, savedVideos: { [] }
         )

@@ -21,7 +21,7 @@ class VideosListViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.videos, [])
     }
 
-    func testSearchVideosShouldPassSearchedStringToSearchVideosUseCase() throws {
+    func testSearchVideosShouldPassSearchedStringToSearchVideosUseCase() {
         var actualSearchString = ""
         let environment = VideosListViewModel.Environment(searchVideos: SearchVideosUseCase(videosMatching: {
             actualSearchString = $0
@@ -31,13 +31,7 @@ class VideosListViewModelTests: XCTestCase {
         let viewModel = VideosListViewModel(environment: environment)
         let expectedSearchString = "search"
 
-        let recorder = viewModel.$videos
-            .record()
-            .next(1)
-
         viewModel.searchVideos(for: expectedSearchString)
-
-        _ = try wait(for: recorder, timeout: 0.20)
 
         XCTAssertEqual(actualSearchString, expectedSearchString)
     }
