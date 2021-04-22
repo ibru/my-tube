@@ -54,7 +54,8 @@ struct VideosListView: View {
                         viewModel: viewModel.viewModel(forDetailOf: item)
                     ),
                     label: {
-                        ...
+                        VideoInfoView(video: .init(video: item), isLiked: item.isLiked)
+                            .padding(5)
                     }
                 )
             }
@@ -65,7 +66,7 @@ struct VideosListView: View {
 ```
 
 ### ViewModels internaly operate on Redux state machine
-They define their own `State`, `Actions`, `Environment`, `Reducer`, `Effect`
+They define their own `State`, `Actions`, `Environment`, `Reducer`, `Effect`.
 
 ```swift
 extension VideoDetailViewModel {
