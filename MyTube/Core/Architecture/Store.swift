@@ -15,7 +15,7 @@ import Foundation
 /// the `scope` method to derive more focused stores that can be passed to subviews.
 public final class Store<State, Action> {
   //var state: CurrentValueSubject<State, Never>
-  @Published public var state: State
+  @Published public private(set) var state: State
 
     public lazy var publisher: StorePublisher<State> = {
         StorePublisher($state)
