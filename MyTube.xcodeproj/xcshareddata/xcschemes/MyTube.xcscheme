@@ -48,6 +48,16 @@
                ReferencedContainer = "container:MyTube.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "492E5E9626307744009DA42E"
+               BuildableName = "MyTubeIntegrationTests.xctest"
+               BlueprintName = "MyTubeIntegrationTests"
+               ReferencedContainer = "container:MyTube.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

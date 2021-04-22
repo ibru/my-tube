@@ -17,6 +17,7 @@
 		49206EF925C035FC0088DBDF /* VideosListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49206EF825C035FC0088DBDF /* VideosListViewModel.swift */; };
 		49206F0C25C041E90088DBDF /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49206F0B25C041E90088DBDF /* SearchBar.swift */; };
 		492579B025C05C30003B4BA8 /* VideosListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492579AF25C05C30003B4BA8 /* VideosListViewModelTests.swift */; };
+		492E5EA526307784009DA42E /* VideosListViewModelToVideoDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492E5EA426307784009DA42E /* VideosListViewModelToVideoDetailViewModelTests.swift */; };
 		493A339B262D8FB100FC9C8E /* VideosListViewModel+Redux.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493A339A262D8FB100FC9C8E /* VideosListViewModel+Redux.swift */; };
 		493A33A0262D900F00FC9C8E /* VideoDetailViewModel+Redux.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493A339F262D900F00FC9C8E /* VideoDetailViewModel+Redux.swift */; };
 		493A33AB262DA76B00FC9C8E /* CoreDataVideoPersistenceRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493A33AA262DA76B00FC9C8E /* CoreDataVideoPersistenceRepository.swift */; };
@@ -42,6 +43,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		492E5E9C26307744009DA42E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 498782EC25BE145D0079701A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 498782F325BE145D0079701A;
+			remoteInfo = MyTube;
+		};
 		4987830B25BE14600079701A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 498782EC25BE145D0079701A /* Project object */;
@@ -62,6 +70,9 @@
 		49206EF825C035FC0088DBDF /* VideosListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosListViewModel.swift; sourceTree = "<group>"; };
 		49206F0B25C041E90088DBDF /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		492579AF25C05C30003B4BA8 /* VideosListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosListViewModelTests.swift; sourceTree = "<group>"; };
+		492E5E9726307744009DA42E /* MyTubeIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyTubeIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		492E5E9B26307744009DA42E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		492E5EA426307784009DA42E /* VideosListViewModelToVideoDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosListViewModelToVideoDetailViewModelTests.swift; sourceTree = "<group>"; };
 		493A339A262D8FB100FC9C8E /* VideosListViewModel+Redux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideosListViewModel+Redux.swift"; sourceTree = "<group>"; };
 		493A339F262D900F00FC9C8E /* VideoDetailViewModel+Redux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoDetailViewModel+Redux.swift"; sourceTree = "<group>"; };
 		493A33AA262DA76B00FC9C8E /* CoreDataVideoPersistenceRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataVideoPersistenceRepository.swift; sourceTree = "<group>"; };
@@ -90,6 +101,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		492E5E9426307744009DA42E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		498782F125BE145D0079701A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -155,6 +173,15 @@
 				4954F02126286F25008D0B60 /* Store.swift */,
 			);
 			path = Architecture;
+			sourceTree = "<group>";
+		};
+		492E5E9826307744009DA42E /* MyTubeIntegrationTests */ = {
+			isa = PBXGroup;
+			children = (
+				492E5EA426307784009DA42E /* VideosListViewModelToVideoDetailViewModelTests.swift */,
+				492E5E9B26307744009DA42E /* Info.plist */,
+			);
+			path = MyTubeIntegrationTests;
 			sourceTree = "<group>";
 		};
 		49495DF625C92E9400B5B616 /* Frameworks */ = {
@@ -228,6 +255,7 @@
 				498782F625BE145D0079701A /* MyTube */,
 				49495DF625C92E9400B5B616 /* Frameworks */,
 				4987830D25BE14600079701A /* MyTubeTests */,
+				492E5E9826307744009DA42E /* MyTubeIntegrationTests */,
 				498782F525BE145D0079701A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -237,6 +265,7 @@
 			children = (
 				498782F425BE145D0079701A /* MyTube.app */,
 				4987830A25BE14600079701A /* MyTubeTests.xctest */,
+				492E5E9726307744009DA42E /* MyTubeIntegrationTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -280,6 +309,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		492E5E9626307744009DA42E /* MyTubeIntegrationTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 492E5EA026307745009DA42E /* Build configuration list for PBXNativeTarget "MyTubeIntegrationTests" */;
+			buildPhases = (
+				492E5E9326307744009DA42E /* Sources */,
+				492E5E9426307744009DA42E /* Frameworks */,
+				492E5E9526307744009DA42E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				492E5E9D26307744009DA42E /* PBXTargetDependency */,
+			);
+			name = MyTubeIntegrationTests;
+			productName = MyTubeIntegrationTests;
+			productReference = 492E5E9726307744009DA42E /* MyTubeIntegrationTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		498782F325BE145D0079701A /* MyTube */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4987831E25BE14600079701A /* Build configuration list for PBXNativeTarget "MyTube" */;
@@ -326,9 +373,13 @@
 		498782EC25BE145D0079701A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1220;
+				LastSwiftUpdateCheck = 1240;
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
+					492E5E9626307744009DA42E = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = 498782F325BE145D0079701A;
+					};
 					498782F325BE145D0079701A = {
 						CreatedOnToolsVersion = 12.2;
 					};
@@ -356,11 +407,19 @@
 			targets = (
 				498782F325BE145D0079701A /* MyTube */,
 				4987830925BE14600079701A /* MyTubeTests */,
+				492E5E9626307744009DA42E /* MyTubeIntegrationTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		492E5E9526307744009DA42E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		498782F225BE145D0079701A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -380,6 +439,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		492E5E9326307744009DA42E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				492E5EA526307784009DA42E /* VideosListViewModelToVideoDetailViewModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		498782F025BE145D0079701A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -426,6 +493,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		492E5E9D26307744009DA42E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 498782F325BE145D0079701A /* MyTube */;
+			targetProxy = 492E5E9C26307744009DA42E /* PBXContainerItemProxy */;
+		};
 		4987830C25BE14600079701A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 498782F325BE145D0079701A /* MyTube */;
@@ -434,6 +506,48 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		492E5E9E26307744009DA42E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DT55KV28NQ;
+				INFOPLIST_FILE = MyTubeIntegrationTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jiriurbasek.MyTubeIntegrationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyTube.app/MyTube";
+			};
+			name = Debug;
+		};
+		492E5E9F26307744009DA42E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DT55KV28NQ;
+				INFOPLIST_FILE = MyTubeIntegrationTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jiriurbasek.MyTubeIntegrationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyTube.app/MyTube";
+			};
+			name = Release;
+		};
 		4987831C25BE14600079701A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -641,6 +755,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		492E5EA026307745009DA42E /* Build configuration list for PBXNativeTarget "MyTubeIntegrationTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				492E5E9E26307744009DA42E /* Debug */,
+				492E5E9F26307744009DA42E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		498782EF25BE145D0079701A /* Build configuration list for PBXProject "MyTube" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
