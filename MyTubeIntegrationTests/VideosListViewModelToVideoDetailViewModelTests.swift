@@ -19,9 +19,9 @@ class VideosListViewModelToVideoDetailViewModelTests: XCTestCase {
         let state: VideosListViewModel.State = .init(loading: .loaded, videos: videos, likedVideoIDs: [])
 
         let loadedVideosSubject = PassthroughSubject<[Video], Error>()
-        let environment = VideosListViewModel.Environment(searchVideos: .init(videosMatching: { _ in
+        let environment = VideosListViewModel.Environment(searchVideos: { _ in
             loadedVideosSubject.eraseToAnyPublisher()
-        }))
+        })
 
         let videosListVM = VideosListViewModel(initialState: state, environment: environment)
         let videoDetailVM = videosListVM.viewModel(forDetailOf: videosListVM.videos.first(where: { $0.id == "id2" })!)

@@ -87,11 +87,11 @@ struct VideosListView_Previews: PreviewProvider {
         VideosListView(
             viewModel: VideosListViewModel(
                 initialState: .init(loading: .loaded, videos: items),
-                environment: VideosListViewModel.Environment(searchVideos: SearchVideosUseCase(videosMatching: { _ in
+                environment: VideosListViewModel.Environment(searchVideos: { _ in
                     Just(items)
                         .setFailureType(to: Error.self)
                         .eraseToAnyPublisher()
-                }))
+                })
             )
         )
     }

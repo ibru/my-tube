@@ -23,10 +23,10 @@ class VideosListViewModelTests: XCTestCase {
 
     func testSearchVideosShouldPassSearchedStringToSearchVideosUseCase() {
         var actualSearchString = ""
-        let environment = VideosListViewModel.Environment(searchVideos: SearchVideosUseCase(videosMatching: {
+        let environment = VideosListViewModel.Environment(searchVideos: {
             actualSearchString = $0
             return .just([])
-        }))
+        })
 
         let viewModel = VideosListViewModel(environment: environment)
         let expectedSearchString = "search"
@@ -59,7 +59,7 @@ class VideosListViewModelTests: XCTestCase {
     func testSearchVideosShouldChangeIsLoadingToTrueWhenVideosMatchingUseCaseIsNotCompletedYet() {
         let loadedVideosSubject = PassthroughSubject<[Video], Error>()
         var environment = VideosListViewModel.Environment.dummy
-        environment.searchVideos = .init(videosMatching: { _ in loadedVideosSubject.eraseToAnyPublisher() })
+        environment.searchVideos = { _ in loadedVideosSubject.eraseToAnyPublisher() }
 
         let viewModel = VideosListViewModel(reducer: VideosListViewModel.reducer, environment: environment)
 
@@ -70,7 +70,7 @@ class VideosListViewModelTests: XCTestCase {
     func testSearchVideosShouldChangeIsLoadingToFalseWhenVideosMatchingUseCaseProducesAnyOutput() {
         let loadedVideosSubject = PassthroughSubject<[Video], Error>()
         var environment = VideosListViewModel.Environment.dummy
-        environment.searchVideos = .init(videosMatching: { _ in loadedVideosSubject.eraseToAnyPublisher() })
+        environment.searchVideos = { _ in loadedVideosSubject.eraseToAnyPublisher() }
 
         let viewModel = VideosListViewModel(environment: environment)
 
@@ -85,7 +85,7 @@ class VideosListViewModelTests: XCTestCase {
         let error: Error = NSError()
 
         var environment = VideosListViewModel.Environment.dummy
-        environment.searchVideos = .init(videosMatching: { _ in loadedVideosSubject.eraseToAnyPublisher() })
+        environment.searchVideos = { _ in loadedVideosSubject.eraseToAnyPublisher() }
 
         let viewModel = VideosListViewModel(environment: environment)
 
@@ -98,7 +98,7 @@ class VideosListViewModelTests: XCTestCase {
     func testSearchVideosShouldSetIsLoadingToTrueWhenVideosMatchingUseCaseIsLoadingVideos() {
         let loadedVideosSubject = PassthroughSubject<[Video], Error>()
         var environment = VideosListViewModel.Environment.noop
-        environment.searchVideos = .init(videosMatching: { _ in loadedVideosSubject.eraseToAnyPublisher() })
+        environment.searchVideos = { _ in loadedVideosSubject.eraseToAnyPublisher() }
 
         let viewModel = VideosListViewModel(environment: environment)
 
@@ -110,7 +110,7 @@ class VideosListViewModelTests: XCTestCase {
     func testSearchVideosShouldReplaceResultsFromPreviousSearch() throws {
         var loadedVideosSubject = PassthroughSubject<[Video], Error>()
         var environment = VideosListViewModel.Environment.noop
-        environment.searchVideos = .init(videosMatching: { _ in loadedVideosSubject.eraseToAnyPublisher() })
+        environment.searchVideos = { _ in loadedVideosSubject.eraseToAnyPublisher() }
 
         let videos1: [Video] = [
             .init(id: "id1", title: "Video 1", imageThumbnailUrl: nil),
@@ -183,9 +183,7 @@ private extension VideosListViewModel.Environment {
 
     static func mock(with videos: [Video]) -> Self {
         .init(
-            searchVideos: SearchVideosUseCase(
-                videosMatching: { _ in .just(videos) }
-            )
+            searchVideos: { _ in .just(videos) }
         )
     }
 }
