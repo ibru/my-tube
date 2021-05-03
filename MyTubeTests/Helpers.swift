@@ -21,4 +21,17 @@ extension AnyPublisher {
         Empty(completeImmediately: true, outputType: Output.self, failureType: Failure.self)
             .eraseToAnyPublisher()
     }
+
+    static func fail<Output, Failure>(_ error: Failure) -> AnyPublisher<Output, Failure> {
+        Fail(error: error).eraseToAnyPublisher()
+    }
+}
+
+struct MockError: Error, Equatable {
+    var message: String
+}
+
+extension String {
+    var url: URL { URL(string: self)! }
+    var request: URLRequest { .init(url: url) }
 }

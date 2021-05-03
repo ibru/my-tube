@@ -8,23 +8,14 @@
 import Foundation
 import Combine
 
-struct SearchVideosUseCase {
-    var videosMatching: (String) -> AnyPublisher<[Video], Error>
-}
+typealias SearchVideosUseCase = (String) -> AnyPublisher<[Video], Error>
 
-extension SearchVideosUseCase {
-    static var live: Self {
-        .init(
-            videosMatching: {
-                YoutubeVideosRepository().videos(for: $0)
-                    .map {
-                        $0.map {
-                            .init(id: $0.id, title: $0.title, imageThumbnailUrl: $0.imageThumbnailUrl)
-                        }
-                    }
-                    .mapError { $0 as Error }
-                    .eraseToAnyPublisher()
-            }
-        )
+typealias SearchVideosRepository = (String) -> AnyPublisher<[Video], Error>
+
+func live(repository: @escaping SearchVideosRepository) -> SearchVideosUseCase {
+    {
+        repository($0)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 }
