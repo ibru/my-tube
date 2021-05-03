@@ -1,5 +1,5 @@
 //
-//  LikeVideoUseCase+CoreDataTests.swift
+//  LikeVideoRepository+CoreDataTests.swift
 //  MyTubeTests
 //
 //  Created by Jiri Urbasek on 4/19/21.
@@ -9,7 +9,7 @@ import XCTest
 @testable import MyTube
 import CombineExpectations
 
-class LikeVideoUseCaseCoreDataTests: XCTestCase {
+class LikeVideoRepositoryCoreDataTests: XCTestCase {
 
     func testLikeShouldCallSaveMethod() throws {
         let exp = expectation(description: "Save method called")

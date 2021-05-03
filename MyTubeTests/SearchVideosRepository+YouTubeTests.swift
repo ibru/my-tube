@@ -10,7 +10,7 @@ import XCTest
 import CombineExpectations
 
 class SearchVideosRepositoryYouTubeTests: XCTestCase {
-    func testAShouldPassSearchStringToAPIFetcher() {
+    func testShouldPassSearchStringToAPIFetcher() {
         let searchString = "search"
         var actualSearchString: String?
 

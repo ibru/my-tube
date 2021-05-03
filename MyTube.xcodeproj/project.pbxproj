@@ -47,7 +47,7 @@
 		4987832E25BE14D10079701A /* VideosListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987832D25BE14D10079701A /* VideosListView.swift */; };
 		4987833725BE93B10079701A /* VideoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987833625BE93B10079701A /* VideoDetailView.swift */; };
 		499F7E1125C142600099C1B0 /* CombineExpectations in Frameworks */ = {isa = PBXBuildFile; productRef = 499F7E1025C142600099C1B0 /* CombineExpectations */; };
-		49B3F832262DB117005037DB /* LikeVideoUseCase+CoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B3F831262DB117005037DB /* LikeVideoUseCase+CoreDataTests.swift */; };
+		49B3F832262DB117005037DB /* LikeVideoRepository+CoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B3F831262DB117005037DB /* LikeVideoRepository+CoreDataTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,7 +113,7 @@
 		4987831025BE14600079701A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4987832D25BE14D10079701A /* VideosListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosListView.swift; sourceTree = "<group>"; };
 		4987833625BE93B10079701A /* VideoDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDetailView.swift; sourceTree = "<group>"; };
-		49B3F831262DB117005037DB /* LikeVideoUseCase+CoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LikeVideoUseCase+CoreDataTests.swift"; sourceTree = "<group>"; };
+		49B3F831262DB117005037DB /* LikeVideoRepository+CoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LikeVideoRepository+CoreDataTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -327,7 +327,7 @@
 				492579AF25C05C30003B4BA8 /* VideosListViewModelTests.swift */,
 				491EE7A2262B877F0093C977 /* VideoDetailViewModelTests.swift */,
 				491EE7B2262B9FA10093C977 /* VideoDetailViewModelStoreTypeTests.swift */,
-				49B3F831262DB117005037DB /* LikeVideoUseCase+CoreDataTests.swift */,
+				49B3F831262DB117005037DB /* LikeVideoRepository+CoreDataTests.swift */,
 				493FD3BB26402AC600D8BABA /* SearchVideosRepository+YouTubeTests.swift */,
 				493FD3A7263FC5A700D8BABA /* NetworkingTests.swift */,
 				493FD3B12640173000D8BABA /* EndpointTests.swift */,
@@ -521,7 +521,7 @@
 				492579B025C05C30003B4BA8 /* VideosListViewModelTests.swift in Sources */,
 				493FD3A8263FC5A700D8BABA /* NetworkingTests.swift in Sources */,
 				491EE7AB262B98410093C977 /* Helpers.swift in Sources */,
-				49B3F832262DB117005037DB /* LikeVideoUseCase+CoreDataTests.swift in Sources */,
+				49B3F832262DB117005037DB /* LikeVideoRepository+CoreDataTests.swift in Sources */,
 				493FD3BC26402AC600D8BABA /* SearchVideosRepository+YouTubeTests.swift in Sources */,
 				493FD3B7264026DC00D8BABA /* Endpoint+SearchVideosTests.swift in Sources */,
 				491EE7A3262B877F0093C977 /* VideoDetailViewModelTests.swift in Sources */,
