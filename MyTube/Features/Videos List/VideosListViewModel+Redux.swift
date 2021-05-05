@@ -76,11 +76,11 @@ extension VideosListViewModel.Environment {
                             .send(environment: .searchMock)
                     }
                 )
-            ), loadSavedVideos: {
-                Just([])
-                    .setFailureType(to: Error.self)
-                    .eraseToAnyPublisher()
-            }
+            ), loadSavedVideos: coreData(
+                persistor: .live(
+                    managedObjectContext: PersistenceController.shared.container.viewContext
+                )
+            )
         )
     }
 }

@@ -16,13 +16,13 @@ struct MyTubeApp: App {
             VideosListView(
                 viewModel: VideosListViewModel(
                     store: .create(
-                        initialState: .init(
-                            videos: [
-                                .init(id: "123", title: "Video title", imageThumbnailUrl: nil),
-                                .init(id: "456", title: "Video 2 title", imageThumbnailUrl: nil),
-                                .init(id: "6789", title: "Video 3 title", imageThumbnailUrl: nil)
-                            ]
-                        )
+//                        initialState: .init(
+//                            videos: [
+//                                .init(id: "123", title: "Video title", imageThumbnailUrl: nil),
+//                                .init(id: "456", title: "Video 2 title", imageThumbnailUrl: nil),
+//                                .init(id: "6789", title: "Video 3 title", imageThumbnailUrl: nil)
+//                            ]
+//                        )
                     )
                 )
             )

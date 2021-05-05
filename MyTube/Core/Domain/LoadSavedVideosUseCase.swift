@@ -11,11 +11,9 @@ import Combine
 typealias LoadSavedVideosUseCase = () -> AnyPublisher<[Video], Error>
 
 typealias LoadSavedVideosRepository = () -> AnyPublisher<[Video], Error>
-//
-//func live(repository: @escaping LoadSavedVideosRepository) -> LoadSavedVideosUseCase {
-//    {
-//        repository()
-//            .receive(on: DispatchQueue.main)
-//            .eraseToAnyPublisher()
-//    }
-//}
+
+func live(repository: @escaping LoadSavedVideosRepository) -> LoadSavedVideosUseCase {
+    {
+        repository()
+    }
+}
