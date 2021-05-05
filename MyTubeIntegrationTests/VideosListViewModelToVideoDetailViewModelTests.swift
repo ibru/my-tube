@@ -10,7 +10,6 @@ import XCTest
 import Combine
 
 class VideosListViewModelToVideoDetailViewModelTests: XCTestCase {
-
     func testVideoInVideosListVMShouldUpdateWhenVideoDetailVMLikesIt() {
         let videos: [Video] = [
             .init(id: "id1", title: "Video 1", imageThumbnailUrl: nil),
@@ -25,7 +24,15 @@ class VideosListViewModelToVideoDetailViewModelTests: XCTestCase {
         }
 
         let videosListVM = VideosListViewModel(initialState: state, environment: environment)
-        let videoDetailVM = videosListVM.viewModel(forDetailOf: videosListVM.videos.first(where: { $0.id == "id2" })!)
+        let videoDetailVM = videosListVM.viewModel(
+            forDetailOf: videosListVM.videos.first(where: { $0.id == "id2" })!,
+            environment: .init(
+                likeVideo: .init(
+                    like: { _ in .just(true) },
+                    dislike: { _ in .just(true) }
+                )
+            )
+        )
 
         XCTAssertTrue(videosListVM.videos.allSatisfy { !$0.isLiked})
         XCTAssertFalse(videoDetailVM.isLiked)
