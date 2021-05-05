@@ -41,7 +41,7 @@ extension CoreDataVideoPersistenceRepository {
                 fetchRequest.sortDescriptors = [
                     NSSortDescriptor(key: "id", ascending: true)
                 ]
-                fetchRequest.predicate = .init(format: "id == \(video.id)")
+                fetchRequest.predicate = .init(format: "id == %@", video.id)
 
                 let videos = try managedObjectContext.fetch(fetchRequest)
                 videos.forEach {
