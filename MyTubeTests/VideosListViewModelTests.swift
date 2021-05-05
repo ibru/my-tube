@@ -17,16 +17,17 @@ class VideosListViewModelTests: XCTestCase {
     func testShouldStartEmpty() {
         let viewModel = VideosListViewModel()
 
-        XCTAssertFalse(viewModel.isLoading)
+        XCTAssertFalse(viewModel.isSearching)
         XCTAssertEqual(viewModel.videos, [])
     }
 
     func testSearchVideosShouldPassSearchedStringToSearchVideosUseCase() {
         var actualSearchString = ""
-        let environment = VideosListViewModel.Environment(searchVideos: {
+        var environment = VideosListViewModel.Environment.noop
+        environment.searchVideos = {
             actualSearchString = $0
             return .just([])
-        })
+        }
 
         let viewModel = VideosListViewModel(environment: environment)
         let expectedSearchString = "search"
@@ -41,7 +42,7 @@ class VideosListViewModelTests: XCTestCase {
             .init(id: "id1", title: "Video 1", imageThumbnailUrl: nil),
             .init(id: "id2", title: "Video 2", imageThumbnailUrl: URL(string: "http://example.com"))
         ]
-        let viewModel = VideosListViewModel(environment: .mock(with: videos))
+        let viewModel = VideosListViewModel(environment: .mock(searchedVideos: videos))
 
         let recorder = viewModel.$videos
             .dropFirst()
@@ -56,20 +57,20 @@ class VideosListViewModelTests: XCTestCase {
         XCTAssertEqual([items], [expectedItems])
     }
 
-    func testSearchVideosShouldChangeIsLoadingToTrueWhenVideosMatchingUseCaseIsNotCompletedYet() {
+    func testSearchVideosShouldChangeIsSearchingToTrueWhenVideosMatchingUseCaseIsNotCompletedYet() {
         let loadedVideosSubject = PassthroughSubject<[Video], Error>()
-        var environment = VideosListViewModel.Environment.dummy
+        var environment = VideosListViewModel.Environment.noop
         environment.searchVideos = { _ in loadedVideosSubject.eraseToAnyPublisher() }
 
         let viewModel = VideosListViewModel(reducer: VideosListViewModel.reducer, environment: environment)
 
         viewModel.searchVideos(for: "search")
-        XCTAssertTrue(viewModel.isLoading)
+        XCTAssertTrue(viewModel.isSearching)
     }
 
-    func testSearchVideosShouldChangeIsLoadingToFalseWhenVideosMatchingUseCaseProducesAnyOutput() {
+    func testSearchVideosShouldChangeIsSearchingToFalseWhenVideosMatchingUseCaseProducesAnyOutput() {
         let loadedVideosSubject = PassthroughSubject<[Video], Error>()
-        var environment = VideosListViewModel.Environment.dummy
+        var environment = VideosListViewModel.Environment.noop
         environment.searchVideos = { _ in loadedVideosSubject.eraseToAnyPublisher() }
 
         let viewModel = VideosListViewModel(environment: environment)
@@ -77,14 +78,14 @@ class VideosListViewModelTests: XCTestCase {
         viewModel.searchVideos(for: "search")
         loadedVideosSubject.send([])
 
-        XCTAssertFalse(viewModel.isLoading)
+        XCTAssertFalse(viewModel.isSearching)
     }
 
-    func testSearchVideosShouldChangeIsLoadingToFalseWhenVideosMatchingUseCaseCompletesWithError() {
+    func testSearchVideosShouldChangeIsSearchingToFalseWhenVideosMatchingUseCaseCompletesWithError() {
         let loadedVideosSubject = PassthroughSubject<[Video], Error>()
         let error: Error = NSError()
 
-        var environment = VideosListViewModel.Environment.dummy
+        var environment = VideosListViewModel.Environment.noop
         environment.searchVideos = { _ in loadedVideosSubject.eraseToAnyPublisher() }
 
         let viewModel = VideosListViewModel(environment: environment)
@@ -92,10 +93,10 @@ class VideosListViewModelTests: XCTestCase {
         viewModel.searchVideos(for: "search")
         loadedVideosSubject.send(completion: .failure(error))
 
-        XCTAssertFalse(viewModel.isLoading)
+        XCTAssertFalse(viewModel.isSearching)
     }
 
-    func testSearchVideosShouldSetIsLoadingToTrueWhenVideosMatchingUseCaseIsLoadingVideos() {
+    func testSearchVideosShouldSetIsSearchingToTrueWhenVideosMatchingUseCaseIsLoadingVideos() {
         let loadedVideosSubject = PassthroughSubject<[Video], Error>()
         var environment = VideosListViewModel.Environment.noop
         environment.searchVideos = { _ in loadedVideosSubject.eraseToAnyPublisher() }
@@ -104,7 +105,7 @@ class VideosListViewModelTests: XCTestCase {
 
         viewModel.searchVideos(for: "search")
 
-        XCTAssertTrue(viewModel.isLoading)
+        XCTAssertTrue(viewModel.isSearching)
     }
     
     func testSearchVideosShouldReplaceResultsFromPreviousSearch() throws {
@@ -151,11 +152,11 @@ class VideosListViewModelTests: XCTestCase {
 
     func testVideosShouldTellWhichVideoIsLiked() {
         let state: VideosListViewModel.State = .init(
-            loading:.loaded,
+            searching: .finished,
             videos: [.mock(id: "id1"), .mock(id: "id2"), .mock(id: "id3")],
             likedVideoIDs: ["id2"]
         )
-        let viewModel = VideosListViewModel(initialState: state, environment: .dummy)
+        let viewModel = VideosListViewModel(initialState: state, environment: .noop)
 
         let likes = viewModel.videos.reduce(into: [:]) { $0[$1.id] = $1.isLiked }
         XCTAssertEqual(likes, ["id1": false, "id2": true, "id3": false])
@@ -163,27 +164,65 @@ class VideosListViewModelTests: XCTestCase {
 
     func testReduceShouldChangeStateFromIdleToLoadingWhenItReceivesOnSearchEvent() {
         let searchString = "search"
-        var state: VideosListViewModel.State = .init(loading:.idle, videos: [])
+        var state: VideosListViewModel.State = .init(searching: .idle, videos: [])
 
-        _ = VideosListViewModel.reducer.run(&state, .onSearch(searchString), .dummy)
+        _ = VideosListViewModel.reducer.run(&state, .onSearch(searchString), .noop)
 
-        XCTAssertEqual(state, .init(loading: .loading(searchString), videos: []))
-    }
-}
-
-
-private extension VideosListViewModel.Environment {
-    static var dummy: Self {
-        return .mock(with: [])
+        XCTAssertEqual(state, .init(searching: .searching(searchString), videos: []))
     }
 
-    static var noop: Self {
-        return .mock(with: [])
-    }
+    func testViewAppearedShouldLoadSavedVideosUsingLoadSavedVideosUC() throws {
+        // TODO: this unit test sometimes randomly fails, its due to data updates inside State. State should be
+        // refactored from keeping `likedVideoIDs` to keep whole videos instead
+        let videos: [Video] = [
+            .init(id: "id1", title: "Video 1", imageThumbnailUrl: nil),
+            .init(id: "id2", title: "Video 2", imageThumbnailUrl: URL(string: "http://example.com"))
+        ]
+        let environment = VideosListViewModel.Environment.mock(savedVideos: videos)
 
-    static func mock(with videos: [Video]) -> Self {
-        .init(
-            searchVideos: { _ in .just(videos) }
+        let viewModel = VideosListViewModel(
+            initialState: .init(locallyLoading: .idle, videos: []),
+            environment: environment
         )
+
+        viewModel.viewAppeared()
+
+        // TODO: need to test using mocked schedulers instead of dispatch async
+        let exp = expectation(description: "wait for dispatch after")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.10) {
+            let items = viewModel.videos
+            let expectedItems = videos.map {
+                VideosListViewModel.VideoItem.init(video: $0, isLiked: true)
+            }
+
+            XCTAssertEqual(items, expectedItems)
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: 0.15)
+    }
+
+    func testSearchVideosShouldMarkSearchedVideoLikedWhenItWasSavedLocallyBefore() throws {
+        let savedVideos: [Video] = [
+            .init(id: "id2", title: "Video 2", imageThumbnailUrl: URL(string: "http://example.com"))
+        ]
+        let searchedVideos: [Video] = [
+            .init(id: "id1", title: "Video 1", imageThumbnailUrl: nil),
+            .init(id: "id2", title: "Video 2", imageThumbnailUrl: URL(string: "http://example.com")),
+            .init(id: "id3", title: "Video 3", imageThumbnailUrl: nil)
+        ]
+
+        let environment = VideosListViewModel.Environment.mock(savedVideos: savedVideos, searchedVideos: searchedVideos)
+
+        let viewModel = VideosListViewModel(
+            initialState: .init(searching: .idle, videos: []),
+            environment: environment
+        )
+
+        viewModel.viewAppeared()
+        viewModel.searchVideos(for: "dummy")
+
+        let items = viewModel.videos
+        let likes = items.reduce(into: [:]) { $0[$1.id] = $1.isLiked }
+        XCTAssertEqual(likes, ["id1": false, "id2": true, "id3": false])
     }
 }

@@ -10,7 +10,7 @@ import Combine
 
 final class VideosListViewModel: ObservableObject {
     @Published var videos: [VideoItem] = []
-    @Published var isLoading: Bool = false
+    @Published var isSearching: Bool = false
 
     private var store: Store<State, Action>!
     private var bag = Set<AnyCancellable>()
@@ -34,16 +34,16 @@ final class VideosListViewModel: ObservableObject {
             }
             .assign(to: &self.$videos)
 
-        store.publisher.loading
+        store.publisher.searching
             .map {
                 switch $0 {
-                case .idle, .loaded, .error(_):
+                case .idle, .finished, .error(_):
                     return false
-                case .loading(_):
+                case .searching(_):
                     return true
                 }
             }
-            .assign(to: &self.$isLoading)
+            .assign(to: &self.$isSearching)
 
         store.publisher.likedVideoIDs
             .sink { [unowned self] IDs in

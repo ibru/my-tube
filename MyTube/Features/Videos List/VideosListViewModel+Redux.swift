@@ -12,24 +12,36 @@ extension VideosListViewModel {
     typealias StoreType = Store<State, Action>
 
     enum Error: Swift.Error, Equatable {
-        case unknown
+        case couldNotSearchVideos
+        case couldNotLocallyLoadVideos
     }
 
     struct State: Equatable {
+        enum SearchingState: Equatable {
+            case idle
+            case searching(String)
+            case finished
+            case error(Error)
+        }
+
         enum LoadingState: Equatable {
             case idle
-            case loading(String)
+            case loading
             case loaded
             case error(Error)
         }
 
-        var loading: LoadingState
+        var searching: SearchingState
+        var localVideosLoading: LoadingState
         var videos: [Video]
 
+        // TODO: better approach would be to save whole Videos instead of just set of IDs. I keep it like this
+        // for now for sake of exploration and learning
         var likedVideoIDs: Set<String>
 
-        init(loading: LoadingState = .idle, videos: [Video] = [], likedVideoIDs: Set<String> = []) {
-            self.loading = loading
+        init(locallyLoading: LoadingState = .idle, searching: SearchingState = .idle, videos: [Video] = [], likedVideoIDs: Set<String> = []) {
+            self.localVideosLoading = locallyLoading
+            self.searching = searching
             self.videos = videos
             self.likedVideoIDs = likedVideoIDs
         }
@@ -42,12 +54,15 @@ extension VideosListViewModel {
     enum Action {
         case onAppear
         case onSearch(String)
-        case onLoadVideos([Video])
-        case onLoadVideosError(Error)
+        case onSearchedVideos([Video])
+        case onSearchedVideosError(Error)
+        case onLocallyLoadedVideos([Video])
+        case onLocallyLoadedVideosError(Error)
     }
 
     struct Environment {
         var searchVideos: SearchVideosUseCase
+        var loadSavedVideos: LoadSavedVideosUseCase
     }
 }
 
@@ -61,7 +76,11 @@ extension VideosListViewModel.Environment {
                             .send(environment: .searchMock)
                     }
                 )
-            )
+            ), loadSavedVideos: {
+                Just([])
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            }
         )
     }
 }
@@ -72,22 +91,32 @@ extension VideosListViewModel {
     static var reducer: ReducerType = {
         .init { (state, action, environment) -> Effect<Action, Never> in
             switch action {
+            case .onAppear:
+                state.localVideosLoading = .loading
+                return Effects.loadSavedVideos(using: environment.loadSavedVideos)
+
             case .onSearch(let searchString):
-                state.loading = .loading(searchString)
+                state.searching = .searching(searchString)
                 return Effects.searchStringPublisher(searchText: searchString, using: environment.searchVideos)
 
-            case .onLoadVideos(let videos):
-                state.loading = .loaded
+            case .onSearchedVideos(let videos):
                 state.videos = videos
+                state.searching = .finished
                 return .none
 
-            case .onAppear:
-                // TODO: load saved videos
+            case .onSearchedVideosError(let error):
+                state.searching = .error(error)
                 return .none
 
-            case .onLoadVideosError(let error):
-                state.loading = .error(error)
+            case .onLocallyLoadedVideos(let videos):
+                state.videos = videos
+                state.likedVideoIDs = Set(videos.map(\.id))
+                state.localVideosLoading = .loaded
                 return .none
+
+            case .onLocallyLoadedVideosError(let error):
+                state.localVideosLoading = .error(error)
+                return.none
             }
         }
     }()
@@ -97,9 +126,15 @@ extension VideosListViewModel {
     struct Effects {
         static func searchStringPublisher(searchText: String, using useCase: SearchVideosUseCase) -> Effect<Action, Never> {
             useCase(searchText)
-                .map(Action.onLoadVideos)
-                .replaceError(with: .onLoadVideosError(.unknown))
-                .eraseToAnyPublisher()
+                .map(Action.onSearchedVideos)
+                .replaceError(with: .onSearchedVideosError(.couldNotSearchVideos))
+                .eraseToEffect()
+        }
+
+        static func loadSavedVideos(using useCase: LoadSavedVideosUseCase) -> Effect<Action, Never> {
+            useCase()
+                .map(Action.onLocallyLoadedVideos)
+                .replaceError(with: .onLocallyLoadedVideosError(.couldNotLocallyLoadVideos))
                 .eraseToEffect()
         }
     }

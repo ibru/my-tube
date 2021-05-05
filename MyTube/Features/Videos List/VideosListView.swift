@@ -86,12 +86,18 @@ struct VideosListView_Previews: PreviewProvider {
     static var previews: some View {
         VideosListView(
             viewModel: VideosListViewModel(
-                initialState: .init(loading: .loaded, videos: items),
-                environment: VideosListViewModel.Environment(searchVideos: { _ in
-                    Just(items)
-                        .setFailureType(to: Error.self)
-                        .eraseToAnyPublisher()
-                })
+                initialState: .init(searching: .finished, videos: items),
+                environment: VideosListViewModel.Environment(
+                    searchVideos: { _ in
+                        Just(items)
+                            .setFailureType(to: Error.self)
+                            .eraseToAnyPublisher()
+                    }, loadSavedVideos: {
+                        Just([items[0]])
+                            .setFailureType(to: Error.self)
+                            .eraseToAnyPublisher()
+                    }
+                )
             )
         )
     }
