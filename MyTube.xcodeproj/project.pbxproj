@@ -35,6 +35,14 @@
 		493FD3D426411B9D00D8BABA /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491EE7AA262B98410093C977 /* Helpers.swift */; };
 		493FD3D926426D9A00D8BABA /* LoadSavedVideosRepository+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493FD3D826426D9A00D8BABA /* LoadSavedVideosRepository+CoreData.swift */; };
 		493FD3DE26426E4800D8BABA /* LoadSavedVideosRepository+CoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493FD3DD26426E4800D8BABA /* LoadSavedVideosRepository+CoreDataTests.swift */; };
+		493FD4022642B38600D8BABA /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 493FD4012642B38600D8BABA /* GRDB */; };
+		493FD4092642B42900D8BABA /* GRDBAppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493FD4082642B42900D8BABA /* GRDBAppDatabase.swift */; };
+		493FD4132642B50C00D8BABA /* GRDBVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493FD4122642B50C00D8BABA /* GRDBVideo.swift */; };
+		493FD4182642BBE900D8BABA /* LikeVideoRepository+GRDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493FD4172642BBE900D8BABA /* LikeVideoRepository+GRDB.swift */; };
+		493FD41D2642C25C00D8BABA /* LoadSavedVideosRepository+GRDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493FD41C2642C25C00D8BABA /* LoadSavedVideosRepository+GRDB.swift */; };
+		493FD42D2642CDB800D8BABA /* GRDBVideoPersistenceRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493FD42C2642CDB800D8BABA /* GRDBVideoPersistenceRepository.swift */; };
+		493FD4322642D0CA00D8BABA /* LikeVideoRepository+GRDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493FD4312642D0CA00D8BABA /* LikeVideoRepository+GRDBTests.swift */; };
+		493FD43B2642D21200D8BABA /* GRDBVideoPersistenceRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493FD43A2642D21200D8BABA /* GRDBVideoPersistenceRepositoryTests.swift */; };
 		49495DF225C4345C00B5B616 /* SearchVideosRepository+YouTube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49495DF125C4345C00B5B616 /* SearchVideosRepository+YouTube.swift */; };
 		49495E0725C92EB000B5B616 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49495DF825C92EB000B5B616 /* ImageCache.swift */; };
 		49495E0825C92EB000B5B616 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49495DF925C92EB000B5B616 /* ImageLoader.swift */; };
@@ -102,6 +110,13 @@
 		493FD3CB26411B5400D8BABA /* VideosListViewModelMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosListViewModelMocks.swift; sourceTree = "<group>"; };
 		493FD3D826426D9A00D8BABA /* LoadSavedVideosRepository+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoadSavedVideosRepository+CoreData.swift"; sourceTree = "<group>"; };
 		493FD3DD26426E4800D8BABA /* LoadSavedVideosRepository+CoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoadSavedVideosRepository+CoreDataTests.swift"; sourceTree = "<group>"; };
+		493FD4082642B42900D8BABA /* GRDBAppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBAppDatabase.swift; sourceTree = "<group>"; };
+		493FD4122642B50C00D8BABA /* GRDBVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBVideo.swift; sourceTree = "<group>"; };
+		493FD4172642BBE900D8BABA /* LikeVideoRepository+GRDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LikeVideoRepository+GRDB.swift"; sourceTree = "<group>"; };
+		493FD41C2642C25C00D8BABA /* LoadSavedVideosRepository+GRDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoadSavedVideosRepository+GRDB.swift"; sourceTree = "<group>"; };
+		493FD42C2642CDB800D8BABA /* GRDBVideoPersistenceRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBVideoPersistenceRepository.swift; sourceTree = "<group>"; };
+		493FD4312642D0CA00D8BABA /* LikeVideoRepository+GRDBTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LikeVideoRepository+GRDBTests.swift"; sourceTree = "<group>"; };
+		493FD43A2642D21200D8BABA /* GRDBVideoPersistenceRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBVideoPersistenceRepositoryTests.swift; sourceTree = "<group>"; };
 		49495DF125C4345C00B5B616 /* SearchVideosRepository+YouTube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchVideosRepository+YouTube.swift"; sourceTree = "<group>"; };
 		49495DF825C92EB000B5B616 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		49495DF925C92EB000B5B616 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
@@ -138,6 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				493FD4022642B38600D8BABA /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,12 +171,12 @@
 		491EE7BD262C7AD80093C977 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				493FD3E6264275A900D8BABA /* Persistence */,
 				491EE7C2262C7B2A0093C977 /* Architecture */,
 				491EE7BE262C7AE00093C977 /* Entities */,
 				491EE7BF262C7AE50093C977 /* Domain */,
 				491EE7C0262C7AF30093C977 /* Data */,
 				493FD38E263C202F00D8BABA /* Networking */,
+				493FD3E6264275A900D8BABA /* Persistence */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -188,7 +204,9 @@
 			children = (
 				49495DF125C4345C00B5B616 /* SearchVideosRepository+YouTube.swift */,
 				496AA5BE262DBE1E007DB54E /* LikeVideoRepository+CoreData.swift */,
+				493FD4172642BBE900D8BABA /* LikeVideoRepository+GRDB.swift */,
 				493FD3D826426D9A00D8BABA /* LoadSavedVideosRepository+CoreData.swift */,
+				493FD41C2642C25C00D8BABA /* LoadSavedVideosRepository+GRDB.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -226,8 +244,8 @@
 		493FD3E6264275A900D8BABA /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
-				493A33AA262DA76B00FC9C8E /* CoreDataVideoPersistenceRepository.swift */,
-				4987830025BE14600079701A /* CoreDataPersistence.swift */,
+				493FD4072642B3FE00D8BABA /* CoreData */,
+				493FD4062642B3F700D8BABA /* GRDB */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -237,6 +255,7 @@
 			children = (
 				493FD3EB264277E200D8BABA /* Data */,
 				493FD3EC264277F900D8BABA /* Networking */,
+				493FD4362642D1F700D8BABA /* Persistence */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -245,6 +264,7 @@
 			isa = PBXGroup;
 			children = (
 				49B3F831262DB117005037DB /* LikeVideoRepository+CoreDataTests.swift */,
+				493FD4312642D0CA00D8BABA /* LikeVideoRepository+GRDBTests.swift */,
 				493FD3BB26402AC600D8BABA /* SearchVideosRepository+YouTubeTests.swift */,
 				493FD3DD26426E4800D8BABA /* LoadSavedVideosRepository+CoreDataTests.swift */,
 			);
@@ -294,6 +314,33 @@
 				491EE7B2262B9FA10093C977 /* VideoDetailViewModelStoreTypeTests.swift */,
 			);
 			path = "Video Detail";
+			sourceTree = "<group>";
+		};
+		493FD4062642B3F700D8BABA /* GRDB */ = {
+			isa = PBXGroup;
+			children = (
+				493FD4082642B42900D8BABA /* GRDBAppDatabase.swift */,
+				493FD42C2642CDB800D8BABA /* GRDBVideoPersistenceRepository.swift */,
+				493FD4122642B50C00D8BABA /* GRDBVideo.swift */,
+			);
+			path = GRDB;
+			sourceTree = "<group>";
+		};
+		493FD4072642B3FE00D8BABA /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				493A33AA262DA76B00FC9C8E /* CoreDataVideoPersistenceRepository.swift */,
+				4987830025BE14600079701A /* CoreDataPersistence.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		493FD4362642D1F700D8BABA /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				493FD43A2642D21200D8BABA /* GRDBVideoPersistenceRepositoryTests.swift */,
+			);
+			path = Persistence;
 			sourceTree = "<group>";
 		};
 		49495DF625C92E9400B5B616 /* Frameworks */ = {
@@ -451,6 +498,7 @@
 			);
 			name = MyTube;
 			packageProductDependencies = (
+				493FD4012642B38600D8BABA /* GRDB */,
 			);
 			productName = MyTube;
 			productReference = 498782F425BE145D0079701A /* MyTube.app */;
@@ -510,6 +558,7 @@
 			mainGroup = 498782EB25BE145D0079701A;
 			packageReferences = (
 				499F7E0F25C142600099C1B0 /* XCRemoteSwiftPackageReference "CombineExpectations" */,
+				493FD4002642B38600D8BABA /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 			);
 			productRefGroup = 498782F525BE145D0079701A /* Products */;
 			projectDirPath = "";
@@ -565,6 +614,8 @@
 			files = (
 				493FD3D926426D9A00D8BABA /* LoadSavedVideosRepository+CoreData.swift in Sources */,
 				49206F0C25C041E90088DBDF /* SearchBar.swift in Sources */,
+				493FD42D2642CDB800D8BABA /* GRDBVideoPersistenceRepository.swift in Sources */,
+				493FD4132642B50C00D8BABA /* GRDBVideo.swift in Sources */,
 				491EE78F2629DE300093C977 /* LikeVideoUseCase.swift in Sources */,
 				4987830125BE14600079701A /* CoreDataPersistence.swift in Sources */,
 				493FD3A0263C22EE00D8BABA /* Endpoint+searchVideos.swift in Sources */,
@@ -577,6 +628,7 @@
 				49495DF225C4345C00B5B616 /* SearchVideosRepository+YouTube.swift in Sources */,
 				4987830425BE14600079701A /* MyTube.xcdatamodeld in Sources */,
 				491EE7C4262D49990093C977 /* Video.swift in Sources */,
+				493FD4182642BBE900D8BABA /* LikeVideoRepository+GRDB.swift in Sources */,
 				496AA5BF262DBE1E007DB54E /* LikeVideoRepository+CoreData.swift in Sources */,
 				4987832E25BE14D10079701A /* VideosListView.swift in Sources */,
 				493FD3C7264114AF00D8BABA /* LoadSavedVideosUseCase.swift in Sources */,
@@ -586,12 +638,14 @@
 				4954F02226286F26008D0B60 /* Store.swift in Sources */,
 				49206EF925C035FC0088DBDF /* VideosListViewModel.swift in Sources */,
 				4954F0272628724D008D0B60 /* Effect.swift in Sources */,
+				493FD41D2642C25C00D8BABA /* LoadSavedVideosRepository+GRDB.swift in Sources */,
 				493A33AB262DA76B00FC9C8E /* CoreDataVideoPersistenceRepository.swift in Sources */,
 				491EE7812629A7460093C977 /* VideoDetailViewModel.swift in Sources */,
 				498782F825BE145D0079701A /* MyTubeApp.swift in Sources */,
 				49495E0825C92EB000B5B616 /* ImageLoader.swift in Sources */,
 				491EE7872629DDDA0093C977 /* SearchVideosUseCase.swift in Sources */,
 				49495E4825CC05B200B5B616 /* VideoPlayerView.swift in Sources */,
+				493FD4092642B42900D8BABA /* GRDBAppDatabase.swift in Sources */,
 				493FD390263C204C00D8BABA /* Endpoint.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -600,6 +654,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				493FD43B2642D21200D8BABA /* GRDBVideoPersistenceRepositoryTests.swift in Sources */,
 				492579B025C05C30003B4BA8 /* VideosListViewModelTests.swift in Sources */,
 				493FD3A8263FC5A700D8BABA /* NetworkingTests.swift in Sources */,
 				491EE7AB262B98410093C977 /* Helpers.swift in Sources */,
@@ -611,6 +666,7 @@
 				491EE7A3262B877F0093C977 /* VideoDetailViewModelTests.swift in Sources */,
 				493FD3B22640173000D8BABA /* EndpointTests.swift in Sources */,
 				491EE7B3262B9FA10093C977 /* VideoDetailViewModelStoreTypeTests.swift in Sources */,
+				493FD4322642D0CA00D8BABA /* LikeVideoRepository+GRDBTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -918,6 +974,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		493FD4002642B38600D8BABA /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.4;
+			};
+		};
 		499F7E0F25C142600099C1B0 /* XCRemoteSwiftPackageReference "CombineExpectations" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/groue/CombineExpectations.git";
@@ -929,6 +993,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		493FD4012642B38600D8BABA /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 493FD4002642B38600D8BABA /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
 		499F7E1025C142600099C1B0 /* CombineExpectations */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 499F7E0F25C142600099C1B0 /* XCRemoteSwiftPackageReference "CombineExpectations" */;

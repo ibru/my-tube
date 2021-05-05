@@ -92,9 +92,11 @@ extension VideoDetailViewModel.Environment {
     static var live: Self {
         .init(
             likeVideo: .live(
-                repository: .coreData(
-                    repository: .live(
-                        managedObjectContext: PersistenceController.shared.container.viewContext)
+                repository: .grdb(
+                    repository: {
+                        let db = GRDBAppDatabase.shared
+                        return .live(dbReader: db.dbReader, dbWriter: db.dbWriter)
+                    }()
                 )
             )
         )
