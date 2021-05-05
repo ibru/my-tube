@@ -76,10 +76,11 @@ extension VideosListViewModel.Environment {
                             .send(environment: .searchMock)
                     }
                 )
-            ), loadSavedVideos: coreData(
-                persistor: .live(
-                    managedObjectContext: PersistenceController.shared.container.viewContext
-                )
+            ), loadSavedVideos: grdb(
+                repository: {
+                    let db = GRDBAppDatabase.shared
+                    return .live(dbReader: db.dbReader, dbWriter: db.dbWriter)
+                }()
             )
         )
     }
