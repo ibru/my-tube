@@ -155,6 +155,7 @@
 		491EE7BD262C7AD80093C977 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				493FD3E6264275A900D8BABA /* Persistence */,
 				491EE7C2262C7B2A0093C977 /* Architecture */,
 				491EE7BE262C7AE00093C977 /* Entities */,
 				491EE7BF262C7AE50093C977 /* Domain */,
@@ -188,8 +189,6 @@
 				49495DF125C4345C00B5B616 /* SearchVideosRepository+YouTube.swift */,
 				496AA5BE262DBE1E007DB54E /* LikeVideoRepository+CoreData.swift */,
 				493FD3D826426D9A00D8BABA /* LoadSavedVideosRepository+CoreData.swift */,
-				493A33AA262DA76B00FC9C8E /* CoreDataVideoPersistenceRepository.swift */,
-				4987830025BE14600079701A /* CoreDataPersistence.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -222,6 +221,79 @@
 				493FD39F263C22EE00D8BABA /* Endpoint+searchVideos.swift */,
 			);
 			path = Networking;
+			sourceTree = "<group>";
+		};
+		493FD3E6264275A900D8BABA /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				493A33AA262DA76B00FC9C8E /* CoreDataVideoPersistenceRepository.swift */,
+				4987830025BE14600079701A /* CoreDataPersistence.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		493FD3EA264277DC00D8BABA /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				493FD3EB264277E200D8BABA /* Data */,
+				493FD3EC264277F900D8BABA /* Networking */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		493FD3EB264277E200D8BABA /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				49B3F831262DB117005037DB /* LikeVideoRepository+CoreDataTests.swift */,
+				493FD3BB26402AC600D8BABA /* SearchVideosRepository+YouTubeTests.swift */,
+				493FD3DD26426E4800D8BABA /* LoadSavedVideosRepository+CoreDataTests.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		493FD3EC264277F900D8BABA /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				493FD3A7263FC5A700D8BABA /* NetworkingTests.swift */,
+				493FD3B12640173000D8BABA /* EndpointTests.swift */,
+				493FD3B6264026DC00D8BABA /* Endpoint+SearchVideosTests.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		493FD3F32642780B00D8BABA /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				491EE7AA262B98410093C977 /* Helpers.swift */,
+				493FD3CB26411B5400D8BABA /* VideosListViewModelMocks.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		493FD3F42642782800D8BABA /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				493FD3F52642783100D8BABA /* Videos List */,
+				493FD3F62642783F00D8BABA /* Video Detail */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		493FD3F52642783100D8BABA /* Videos List */ = {
+			isa = PBXGroup;
+			children = (
+				492579AF25C05C30003B4BA8 /* VideosListViewModelTests.swift */,
+			);
+			path = "Videos List";
+			sourceTree = "<group>";
+		};
+		493FD3F62642783F00D8BABA /* Video Detail */ = {
+			isa = PBXGroup;
+			children = (
+				491EE7A2262B877F0093C977 /* VideoDetailViewModelTests.swift */,
+				491EE7B2262B9FA10093C977 /* VideoDetailViewModelStoreTypeTests.swift */,
+			);
+			path = "Video Detail";
 			sourceTree = "<group>";
 		};
 		49495DF625C92E9400B5B616 /* Frameworks */ = {
@@ -336,17 +408,9 @@
 		4987830D25BE14600079701A /* MyTubeTests */ = {
 			isa = PBXGroup;
 			children = (
-				492579AF25C05C30003B4BA8 /* VideosListViewModelTests.swift */,
-				491EE7A2262B877F0093C977 /* VideoDetailViewModelTests.swift */,
-				491EE7B2262B9FA10093C977 /* VideoDetailViewModelStoreTypeTests.swift */,
-				49B3F831262DB117005037DB /* LikeVideoRepository+CoreDataTests.swift */,
-				493FD3BB26402AC600D8BABA /* SearchVideosRepository+YouTubeTests.swift */,
-				493FD3DD26426E4800D8BABA /* LoadSavedVideosRepository+CoreDataTests.swift */,
-				493FD3A7263FC5A700D8BABA /* NetworkingTests.swift */,
-				493FD3B12640173000D8BABA /* EndpointTests.swift */,
-				493FD3B6264026DC00D8BABA /* Endpoint+SearchVideosTests.swift */,
-				491EE7AA262B98410093C977 /* Helpers.swift */,
-				493FD3CB26411B5400D8BABA /* VideosListViewModelMocks.swift */,
+				493FD3F42642782800D8BABA /* Features */,
+				493FD3EA264277DC00D8BABA /* Core */,
+				493FD3F32642780B00D8BABA /* Helpers */,
 				4987831025BE14600079701A /* Info.plist */,
 			);
 			path = MyTubeTests;
