@@ -93,10 +93,7 @@ extension VideoDetailViewModel.Environment {
         .init(
             likeVideo: .live(
                 repository: .grdb(
-                    repository: {
-                        let db = GRDBAppDatabase.shared
-                        return .live(dbReader: db.dbReader, dbWriter: db.dbWriter)
-                    }()
+                    repository: .live(createDatabase: { try .init(fileName: GRDBAppDatabase.defaultDBFileName) })
                 )
             )
         )

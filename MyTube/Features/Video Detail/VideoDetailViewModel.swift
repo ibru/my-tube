@@ -36,7 +36,6 @@ final class VideoDetailViewModel: ObservableObject {
     }
 }
 
-
 extension VideoDetailViewModel {
     struct VideoItem: Equatable, Identifiable {
         let id: String

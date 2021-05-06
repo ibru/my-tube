@@ -16,8 +16,7 @@ class GRDBVideoPersistenceRepositoryTests: XCTestCase {
         let video = Video(id: "", title: "title", imageThumbnailUrl: nil)
 
         let repository = GRDBVideoPersistenceRepository.live(
-            dbReader: appDatabase.dbReader,
-            dbWriter: appDatabase.dbWriter
+            createDatabase: { try GRDBAppDatabase(dbQueue) }
         )
 
         XCTAssertThrowsError(try repository.saveVideo(video), "") { error in

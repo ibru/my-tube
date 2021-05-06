@@ -25,8 +25,16 @@ struct GRDBVideoPersistenceRepository {
 }
 
 extension GRDBVideoPersistenceRepository {
-    static func live(dbReader: DatabaseReader, dbWriter: DatabaseWriter) -> Self {
-        .init(
+    static func live(createDatabase: @escaping () throws -> GRDBAppDatabase) -> Self {
+        var _db: GRDBAppDatabase!
+        func db() throws -> GRDBAppDatabase {
+            if _db == nil {
+                _db = try createDatabase()
+            }
+            return _db
+        }
+
+        return .init(
             saveVideo: { video in
                 var grdbVideo = GRDBVideo(video: video, saveDate: .init())
 
@@ -36,17 +44,17 @@ extension GRDBVideoPersistenceRepository {
                 if grdbVideo.videoID.isEmpty {
                     throw GRDBAppDatabase.ValidationError.missingRequiredField("videoID")
                 }
-                try dbWriter.write { db in
+                try db().dbWriter.write { db in
                     try grdbVideo.save(db)
                 }
             },
             deleteVideo: { video in
-                try dbWriter.write { db in
+                try db().dbWriter.write { db in
                     _ = try GRDBVideo.deleteOne(db, key: ["videoID": video.id])
                 }
             },
             savedVideos: {
-                try dbReader.read { db in
+                try db().dbReader.read { db in
                     try GRDBVideo.all().orderedBySaveDate().fetchAll(db)
                 }
                 .map {

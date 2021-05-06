@@ -39,41 +39,23 @@ struct GRDBAppDatabase {
         self.dbWriter = dbWriter
         try migrator.migrate(dbWriter)
     }
-}
 
-extension GRDBAppDatabase {
-    static let shared = makeShared()
+    init(fileName: String) throws {
+        let fileManager = FileManager()
+        let folderURL = try fileManager
+            .url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            .appendingPathComponent("database", isDirectory: true)
 
-    private static func makeShared() -> GRDBAppDatabase {
-        do {
-            let fileManager = FileManager()
-            let folderURL = try fileManager
-                .url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-                .appendingPathComponent("database", isDirectory: true)
-
-            // Support for tests: delete the database if requested
-            if CommandLine.arguments.contains("-reset") {
-                try? fileManager.removeItem(at: folderURL)
-            }
-
-            try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true)
-            let dbURL = folderURL.appendingPathComponent("db.sqlite")
-            let dbPool = try DatabasePool(path: dbURL.path)
-            let appDatabase = try GRDBAppDatabase(dbPool)
-
-            return appDatabase
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate.
-            //
-            // Typical reasons for an error here include:
-            // * The parent directory cannot be created, or disallows writing.
-            // * The database is not accessible, due to permissions or data protection when the device is locked.
-            // * The device is out of space.
-            // * The database could not be migrated to its latest schema version.
-            // Check the error message to determine what the actual problem was.
-            fatalError("Unresolved error \(error)")
+        // Support for tests: delete the database if requested
+        if CommandLine.arguments.contains("-reset") {
+            try? fileManager.removeItem(at: folderURL)
         }
+
+        try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true)
+        let dbURL = folderURL.appendingPathComponent(fileName)
+        let dbPool = try DatabasePool(path: dbURL.path)
+
+        try self.init(dbPool)
     }
 }
 
@@ -88,6 +70,8 @@ extension GRDBAppDatabase {
             }
         }
     }
+
+    static var defaultDBFileName = "db.sqlite"
 }
 
 extension GRDBAppDatabase {
