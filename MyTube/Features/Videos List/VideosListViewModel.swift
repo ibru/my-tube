@@ -26,10 +26,12 @@ final class VideosListViewModel: ObservableObject {
     init(store: StoreType) {
         self.store = store
 
+        var likedVideoIDs: Set<String> = []
+
         store.publisher.videos
             .map {
-                $0.map { [unowned self] video in
-                    .init(video: video, isLiked: self.store.state.isLiked(videoId: video.id))
+                $0.map { video in
+                    .init(video: video, isLiked: likedVideoIDs.contains(video.id))
                 }
             }
             .assign(to: &self.$videos)
@@ -47,6 +49,8 @@ final class VideosListViewModel: ObservableObject {
 
         store.publisher.likedVideoIDs
             .sink { [unowned self] IDs in
+                likedVideoIDs = IDs
+
                 self.videos = self.videos
                     .map {
                         var updatedVideo = $0

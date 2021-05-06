@@ -108,9 +108,11 @@ class VideosListViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isSearching)
     }
     
-    func testSearchVideosShouldReplaceResultsFromPreviousSearch() throws {
+    func testSearchVideosShouldReplaceResultsFromPreviousSearch() {
         var loadedVideosSubject = PassthroughSubject<[Video], Error>()
+        let mainQueue = DispatchQueue.test
         var environment = VideosListViewModel.Environment.noop
+        environment.mainQueue = mainQueue.eraseToAnyScheduler()
         environment.searchVideos = { _ in loadedVideosSubject.eraseToAnyPublisher() }
 
         let videos1: [Video] = [
@@ -124,30 +126,35 @@ class VideosListViewModelTests: XCTestCase {
 
         let viewModel = VideosListViewModel(environment: environment)
 
-        let recorder = viewModel.$videos
-            .dropFirst()
-            .record()
-            .next(2)
-
-        viewModel.searchVideos(for: "search1")
-        loadedVideosSubject.send(videos1)
-        loadedVideosSubject.send(completion: .finished)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        mainQueue.schedule(after: mainQueue.now.advanced(by: 1)) {
+            loadedVideosSubject.send(videos1)
+            loadedVideosSubject.send(completion: .finished)
+        }
+        mainQueue.schedule(after: mainQueue.now.advanced(by: 2)) {
             loadedVideosSubject = PassthroughSubject<[Video], Error>()
             viewModel.searchVideos(for: "search2")
+        }
+        mainQueue.schedule(after: mainQueue.now.advanced(by: 3)) {
             loadedVideosSubject.send(videos2)
             loadedVideosSubject.send(completion: .finished)
         }
 
-        let items = try wait(for: recorder, timeout: 0.20)
+        viewModel.searchVideos(for: "search1")
 
-        let expectedItems: [[VideosListViewModel.VideoItem]] = [
-            videos1.map(VideosListViewModel.VideoItem.init),
-            videos2.map(VideosListViewModel.VideoItem.init)
-        ]
+        XCTAssertEqual(viewModel.videos.count, 0)
+        XCTAssertTrue(viewModel.isSearching)
 
-        XCTAssertEqual(items, expectedItems)
+        mainQueue.advance(by: 1)
+        XCTAssertEqual(viewModel.videos, videos1.map(VideosListViewModel.VideoItem.init))
+        XCTAssertFalse(viewModel.isSearching)
+
+        mainQueue.advance(by: 1)
+        XCTAssertEqual(viewModel.videos, videos1.map(VideosListViewModel.VideoItem.init))
+        XCTAssertTrue(viewModel.isSearching)
+
+        mainQueue.advance(by: 1)
+        XCTAssertEqual(viewModel.videos, videos2.map(VideosListViewModel.VideoItem.init))
+        XCTAssertFalse(viewModel.isSearching)
     }
 
     func testVideosShouldTellWhichVideoIsLiked() {
@@ -162,7 +169,7 @@ class VideosListViewModelTests: XCTestCase {
         XCTAssertEqual(likes, ["id1": false, "id2": true, "id3": false])
     }
 
-    func testReduceShouldChangeStateFromIdleToLoadingWhenItReceivesOnSearchEvent() {
+    func testReducerShouldChangeSearchingStateFromIdleToLoadingWhenItReceivesOnSearchEvent() {
         let searchString = "search"
         var state: VideosListViewModel.State = .init(searching: .idle, videos: [])
 
@@ -172,8 +179,6 @@ class VideosListViewModelTests: XCTestCase {
     }
 
     func testViewAppearedShouldLoadSavedVideosUsingLoadSavedVideosUC() throws {
-        // TODO: this unit test sometimes randomly fails, its due to data updates inside State. State should be
-        // refactored from keeping `likedVideoIDs` to keep whole videos instead
         let videos: [Video] = [
             .init(id: "id1", title: "Video 1", imageThumbnailUrl: nil),
             .init(id: "id2", title: "Video 2", imageThumbnailUrl: URL(string: "http://example.com"))
@@ -187,18 +192,10 @@ class VideosListViewModelTests: XCTestCase {
 
         viewModel.viewAppeared()
 
-        // TODO: need to test using mocked schedulers instead of dispatch async
-        let exp = expectation(description: "wait for dispatch after")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.10) {
-            let items = viewModel.videos
-            let expectedItems = videos.map {
-                VideosListViewModel.VideoItem.init(video: $0, isLiked: true)
-            }
-
-            XCTAssertEqual(items, expectedItems)
-            exp.fulfill()
+        let expectedItems = videos.map {
+            VideosListViewModel.VideoItem.init(video: $0, isLiked: true)
         }
-        waitForExpectations(timeout: 0.15)
+        XCTAssertEqual(viewModel.videos, expectedItems)
     }
 
     func testSearchVideosShouldMarkSearchedVideoLikedWhenItWasSavedLocallyBefore() throws {

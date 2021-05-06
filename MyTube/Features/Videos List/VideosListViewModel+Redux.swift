@@ -88,7 +88,10 @@ extension VideosListViewModel {
             switch action {
             case .onAppear:
                 state.localVideosLoading = .loading
-                return Effects.loadSavedVideos(using: environment.loadSavedVideos)
+                return Effects.loadSavedVideos(
+                    using: environment.loadSavedVideos,
+                    scheduler: environment.mainQueue
+                )
 
             case .onSearch(let searchString):
                 state.searching = .searching(searchString)
@@ -123,7 +126,11 @@ extension VideosListViewModel {
 
 extension VideosListViewModel {
     struct Effects {
-        static func searchStringPublisher(searchText: String, using useCase: SearchVideosUseCase, scheduler: AnySchedulerOf<DispatchQueue>) -> Effect<Action, Never> {
+        static func searchStringPublisher(
+            searchText: String,
+            using useCase: SearchVideosUseCase,
+            scheduler: AnySchedulerOf<DispatchQueue>
+        ) -> Effect<Action, Never> {
             useCase(searchText)
                 .receive(on: scheduler)
                 .map(Action.onSearchedVideos)
@@ -131,8 +138,12 @@ extension VideosListViewModel {
                 .eraseToEffect()
         }
 
-        static func loadSavedVideos(using useCase: LoadSavedVideosUseCase) -> Effect<Action, Never> {
+        static func loadSavedVideos(
+            using useCase: LoadSavedVideosUseCase,
+            scheduler: AnySchedulerOf<DispatchQueue>
+        ) -> Effect<Action, Never> {
             useCase()
+                .receive(on: scheduler)
                 .map(Action.onLocallyLoadedVideos)
                 .replaceError(with: .onLocallyLoadedVideosError(.couldNotLocallyLoadVideos))
                 .eraseToEffect()
