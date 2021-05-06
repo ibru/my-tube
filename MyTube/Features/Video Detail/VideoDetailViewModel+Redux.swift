@@ -88,17 +88,18 @@ extension VideoDetailViewModel {
     }
 }
 
+#if DEBUG
 extension VideoDetailViewModel.Environment {
-    static var live: Self {
-        .init(
-            likeVideo: .live(
-                repository: .grdb(
-                    repository: .live(createDatabase: { try .init(fileName: GRDBAppDatabase.defaultDBFileName) })
-                )
+    static var noop: Self {
+        return .init(
+            likeVideo: LikeVideoUseCase(
+                like: { _ in .empty() },
+                dislike: { _ in .empty() }
             )
         )
     }
 }
+#endif
 
 extension VideoDetailViewModel.StoreType {
     static func toLocalState(for selectedItem: Video, globalState: VideosListViewModel.State) -> (VideoDetailViewModel.State) {

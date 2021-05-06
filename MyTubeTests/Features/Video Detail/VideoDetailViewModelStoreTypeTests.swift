@@ -37,5 +37,4 @@ class VideoDetailViewModelStoreTypeTests: XCTestCase {
         let localState = VideoDetailViewModel.StoreType.toLocalState(for: .mock(id: "id3"), globalState: globalState)
         XCTAssertFalse(localState.isLiked)
     }
-    
 }

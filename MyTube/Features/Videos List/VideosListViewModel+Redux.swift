@@ -69,22 +69,6 @@ extension VideosListViewModel {
 }
 
 extension VideosListViewModel.Environment {
-    static var live: Self {
-        .init(
-            mainQueue: .main,
-            searchVideos: MyTube.live(
-                repository: youTube(
-                    apiFetcher: {
-                        Endpoint.searchVideos(searchText: $0)
-                            .send(environment: .searchMock)
-                    }
-                )
-            ), loadSavedVideos: grdb(
-                repository: .live(createDatabase: { try .init(fileName: GRDBAppDatabase.defaultDBFileName) })
-            )
-        )
-    }
-
 #if DEBUG
     static var noop: Self {
         .init(

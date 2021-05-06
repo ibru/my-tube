@@ -81,17 +81,6 @@ class VideoDetailViewModelTests: XCTestCase {
     }
 }
 
-private extension VideoDetailViewModel.Environment {
-    static var noop: Self {
-        return .init(
-            likeVideo: LikeVideoUseCase(
-                like: { _ in .empty() },
-                dislike: { _ in .empty() }
-            )
-        )
-    }
-}
-
 extension VideoDetailViewModel.State {
     static func mock(
         video: Video = .mock(),
