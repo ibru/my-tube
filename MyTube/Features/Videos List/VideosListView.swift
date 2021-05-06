@@ -88,6 +88,7 @@ struct VideosListView_Previews: PreviewProvider {
             viewModel: VideosListViewModel(
                 initialState: .init(searching: .finished, videos: items),
                 environment: VideosListViewModel.Environment(
+                    mainQueue: .main,
                     searchVideos: { _ in
                         Just(items)
                             .setFailureType(to: Error.self)

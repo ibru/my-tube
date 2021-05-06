@@ -226,3 +226,13 @@ class VideosListViewModelTests: XCTestCase {
         XCTAssertEqual(likes, ["id1": false, "id2": true, "id3": false])
     }
 }
+
+extension VideosListViewModel.Environment {
+    static func mock(savedVideos: [Video] = [], searchedVideos: [Video] = []) -> Self {
+        .init(
+            mainQueue: .immediate,
+            searchVideos: { _ in .just(searchedVideos) },
+            loadSavedVideos: { .just(savedVideos) }
+        )
+    }
+}

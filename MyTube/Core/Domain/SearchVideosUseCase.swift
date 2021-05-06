@@ -15,7 +15,5 @@ typealias SearchVideosRepository = (String) -> AnyPublisher<[Video], Error>
 func live(repository: @escaping SearchVideosRepository) -> SearchVideosUseCase {
     {
         repository($0)
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
     }
 }

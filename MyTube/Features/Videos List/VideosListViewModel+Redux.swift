@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import CombineSchedulers
 
 extension VideosListViewModel {
     typealias StoreType = Store<State, Action>
@@ -61,6 +62,7 @@ extension VideosListViewModel {
     }
 
     struct Environment {
+        var mainQueue: AnySchedulerOf<DispatchQueue>
         var searchVideos: SearchVideosUseCase
         var loadSavedVideos: LoadSavedVideosUseCase
     }
@@ -69,6 +71,7 @@ extension VideosListViewModel {
 extension VideosListViewModel.Environment {
     static var live: Self {
         .init(
+            mainQueue: .main,
             searchVideos: MyTube.live(
                 repository: youTube(
                     apiFetcher: {
@@ -84,6 +87,16 @@ extension VideosListViewModel.Environment {
             )
         )
     }
+
+#if DEBUG
+    static var noop: Self {
+        .init(
+            mainQueue: .immediate,
+            searchVideos: { _ in .empty() },
+            loadSavedVideos: { .empty() }
+        )
+    }
+#endif
 }
 
 extension VideosListViewModel {
@@ -98,7 +111,11 @@ extension VideosListViewModel {
 
             case .onSearch(let searchString):
                 state.searching = .searching(searchString)
-                return Effects.searchStringPublisher(searchText: searchString, using: environment.searchVideos)
+                return Effects.searchStringPublisher(
+                    searchText: searchString,
+                    using: environment.searchVideos,
+                    scheduler: environment.mainQueue
+                )
 
             case .onSearchedVideos(let videos):
                 state.videos = videos
@@ -125,8 +142,9 @@ extension VideosListViewModel {
 
 extension VideosListViewModel {
     struct Effects {
-        static func searchStringPublisher(searchText: String, using useCase: SearchVideosUseCase) -> Effect<Action, Never> {
+        static func searchStringPublisher(searchText: String, using useCase: SearchVideosUseCase, scheduler: AnySchedulerOf<DispatchQueue>) -> Effect<Action, Never> {
             useCase(searchText)
+                .receive(on: scheduler)
                 .map(Action.onSearchedVideos)
                 .replaceError(with: .onSearchedVideosError(.couldNotSearchVideos))
                 .eraseToEffect()
